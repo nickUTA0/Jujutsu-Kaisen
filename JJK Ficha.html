@@ -1,0 +1,1737 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ficha Jujutsu RPG</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Hanken+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&text=%E5%91%AA%E8%A1%93%E5%BB%BB%E6%88%A6%E7%94%9F%E5%91%BD%E5%8A%9B%E6%88%A6%E9%97%98%E8%83%BD%E5%BC%8F%E6%8C%81%E7%89%A9%E7%B5%8C%E6%AD%B4&display=swap">
+<style>
+:root{
+  /* Layout: cabeçalho grande, grade de 2 colunas (vitais e combate | status), inata e inventário em largura total, dock fixa com o resultado das rolagens. */
+  /* Tema da inata: cada inata redefine só estas variáveis (matiz, saturação e luminosidades). */
+  --h:255; --as:90%; --al:58%; --ald:72%; --alt:48%; --altd:84%; --ns:22%; --nsd:40%;
+  --bg:hsl(var(--h) var(--ns) 94%); --surface:hsl(var(--h) var(--ns) 98%); --surface2:hsl(var(--h) var(--ns) 90%); --field:#ffffff; --line:hsl(var(--h) var(--ns) 82%);
+  --ink:hsl(var(--h) calc(var(--ns) * 2.2) 10%); --muted:hsl(var(--h) calc(var(--ns) * .6) 38%);
+  --accent:hsl(var(--h) var(--as) var(--al)); --on-accent:#ffffff; --accent-soft:hsl(var(--h) var(--as) 92%); --accent-text:hsl(var(--h) var(--as) var(--alt));
+  --hot:#c81e45; --good:#13805c; --warn:#a96a00;
+  --f-display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --f-body:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --f-jp:'Noto Sans JP','Hiragino Sans','Yu Gothic','Noto Sans CJK JP',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:hsl(var(--h) var(--nsd) 6%); --surface:hsl(var(--h) var(--nsd) 11%); --surface2:hsl(var(--h) var(--nsd) 17%); --field:hsl(var(--h) var(--nsd) 8%); --line:hsl(var(--h) var(--nsd) 24%);
+    --ink:hsl(var(--h) calc(var(--nsd) * 1.6) 94%); --muted:hsl(var(--h) calc(var(--nsd) * .5) 70%);
+    --accent:hsl(var(--h) var(--as) var(--ald)); --on-accent:hsl(var(--h) var(--nsd) 6%); --accent-soft:hsl(var(--h) calc(var(--as) * .5) 24%); --accent-text:hsl(var(--h) var(--as) var(--altd));
+    --hot:#ff5c78; --good:#43deaa; --warn:#f3b94d; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:hsl(var(--h) var(--nsd) 6%); --surface:hsl(var(--h) var(--nsd) 11%); --surface2:hsl(var(--h) var(--nsd) 17%); --field:hsl(var(--h) var(--nsd) 8%); --line:hsl(var(--h) var(--nsd) 24%);
+  --ink:hsl(var(--h) calc(var(--nsd) * 1.6) 94%); --muted:hsl(var(--h) calc(var(--nsd) * .5) 70%);
+  --accent:hsl(var(--h) var(--as) var(--ald)); --on-accent:hsl(var(--h) var(--nsd) 6%); --accent-soft:hsl(var(--h) calc(var(--as) * .5) 24%); --accent-text:hsl(var(--h) var(--as) var(--altd));
+  --hot:#ff5c78; --good:#43deaa; --warn:#f3b94d; color-scheme:dark;
+}
+[hidden]{display:none!important}
+/* temas por inata */
+:root[data-inata="velocidade"]{--h:128;--as:78%;--al:30%;--ald:56%;--alt:26%;--altd:70%;--ns:20%;--nsd:38%}
+:root[data-inata="restricao"]{--h:0;--as:0%;--al:9%;--ald:92%;--alt:9%;--altd:90%;--ns:0%;--nsd:0%}
+:root[data-inata="tsukumo"]{--h:288;--as:76%;--al:42%;--ald:68%;--alt:38%;--altd:80%;--ns:22%;--nsd:40%}
+:root[data-inata="gelo"]{--h:200;--as:85%;--al:36%;--ald:62%;--alt:30%;--altd:74%;--ns:20%;--nsd:34%}
+:root[data-inata="sombras"]{--h:250;--as:48%;--al:34%;--ald:70%;--alt:30%;--altd:80%;--ns:22%;--nsd:34%}
+:root[data-inata="adaptacao"]{--h:32;--as:90%;--al:38%;--ald:58%;--alt:32%;--altd:70%;--ns:18%;--nsd:30%}
+:root[data-inata="cupido"]{--h:322;--as:76%;--al:44%;--ald:68%;--alt:40%;--altd:80%;--ns:16%;--nsd:30%}
+:root[data-inata="sangue"]{--h:348;--as:78%;--al:42%;--ald:60%;--alt:38%;--altd:74%;--ns:16%;--nsd:30%}
+.marks{display:flex;gap:8px;align-items:center;margin-top:8px}
+.pip{width:20px;height:20px;border-radius:50%;border:2px solid var(--accent)}
+.pip.on{background:var(--accent)}
+.armas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.arma-n{margin:4px 0;font-size:18px}
+.lore summary{cursor:pointer;margin:6px 0;color:var(--accent)}
+.lore ul{margin:6px 0;padding-left:18px}
+.musa{border-top:1px solid var(--line,#8884);margin-top:8px;padding-top:8px}
+.seg.origem{max-width:380px;margin-top:6px}
+:root[data-inata="itadori"]{--h:4;--as:80%;--al:40%;--ald:60%;--alt:36%;--altd:72%;--ns:14%;--nsd:26%}
+:root[data-inata="armas"]{--h:172;--as:82%;--al:29%;--ald:54%;--alt:25%;--altd:68%;--ns:20%;--nsd:38%}
+@media (prefers-reduced-motion:no-preference){body,.card,.dock{transition:background-color .35s,border-color .35s}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
+  padding-block:20px 120px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3,p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+.jp{font-family:var(--f-jp);font-weight:700;color:var(--muted);font-size:.7em;letter-spacing:.08em;margin-left:8px}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono)}
+
+/* cabeçalho */
+.top{position:relative;overflow:hidden;padding:18px 4px 6px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.top .mark{position:absolute;right:-8px;top:-44px;font:700 230px/1 var(--f-jp);color:var(--accent);opacity:.09;pointer-events:none;user-select:none}
+.top-in{position:relative;min-width:0}
+.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+h1{font:800 clamp(36px,7vw,68px)/.95 var(--f-display);text-transform:uppercase;letter-spacing:.01em;text-wrap:balance;overflow-wrap:anywhere}
+.top-sub{margin-top:6px;color:var(--muted)}
+.top{min-height:170px}
+.top .mark.has-art{font-size:0;top:0;right:0;bottom:0;width:min(620px,85%);opacity:.3}
+.top .mark.has-art svg{width:100%;height:100%;display:block}
+.a-inata{position:relative;overflow:hidden}
+.card-art{position:absolute;top:0;right:0;width:min(520px,80%);height:100%;opacity:.1;color:var(--accent);pointer-events:none;z-index:0}
+.card-art svg{width:100%;height:100%;display:block}
+.a-inata>*:not(.card-art){position:relative;z-index:1}
+.top-tools{position:relative;display:flex;gap:8px}
+
+/* cartões */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.card>h2,.card-h h2{font:800 28px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:baseline}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.card>h2{margin-bottom:14px}
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){
+  .grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    grid-template-areas:"ident ident" "vitals status" "combat status" "inata inata" "rev rev" "inv inv" "hist hist";align-items:start}
+  .a-ident{grid-area:ident}.a-vitals{grid-area:vitals}.a-status{grid-area:status}.a-combat{grid-area:combat}
+  .a-inata{grid-area:inata}.a-rev{grid-area:rev}.a-inv{grid-area:inv}.a-hist{grid-area:hist}
+}
+
+/* controles */
+.btn{border:1px solid var(--line);background:var(--surface2);padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;line-height:1.2}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.hot{background:var(--hot);border-color:var(--hot);color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.icon{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);cursor:pointer;font-weight:700;line-height:1;display:inline-grid;place-items:center;flex:none}
+.icon:hover:not([disabled]){border-color:var(--accent)}
+.icon[disabled]{opacity:.35;cursor:not-allowed}
+:is(button,input,select,textarea,summary):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}
+textarea{resize:vertical;line-height:1.5}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:0}
+.fld input,.fld select,.fld textarea{font-size:15px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.chip{display:inline-block;font:700 12px var(--f-mono);padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-text);white-space:nowrap}
+.chip.bad{background:transparent;border:1px dashed var(--warn);color:var(--warn)}
+.chip.off{opacity:.45}
+.chip.good{background:transparent;border:1px solid var(--good);color:var(--good)}
+.chip.hot{background:transparent;border:1px solid var(--hot);color:var(--hot)}
+
+/* identidade */
+.ident{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){.ident{grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,1.6fr) minmax(0,1.4fr)}}
+.extra{display:inline-flex;align-items:center;gap:6px;margin-left:6px}
+.extra input{width:64px;text-align:center;font-family:var(--f-mono);padding:6px 4px}
+.lvl{display:flex;align-items:center;gap:10px}
+.lvl b{font:800 40px/1 var(--f-display);min-width:2ch;text-align:center}
+.lvl small{display:block;color:var(--muted);font-size:12px;line-height:1.3;margin-top:4px;text-transform:none;letter-spacing:0;font-weight:400}
+
+/* banner exemplo */
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px dashed var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:10px;padding:12px 16px}
+.banner p{flex:1 1 280px}
+.banner div{display:flex;gap:8px;flex-wrap:wrap}
+
+/* vitais */
+.vital+.vital{margin-top:22px;padding-top:20px;border-top:1px dashed var(--line)}
+.vital-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.vital-h h3{font:800 22px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.formula{font:500 12px var(--f-mono);color:var(--muted)}
+.big{font:800 54px/1 var(--f-display);margin:8px 0 8px;display:flex;align-items:baseline;gap:6px}
+.big small{font:700 22px var(--f-display);color:var(--muted)}
+.bar{display:flex;height:12px;border-radius:6px;background:var(--surface2);overflow:hidden}
+.bar i{display:block;height:100%;transition:width .25s}
+.bar .f-pv{background:var(--hot)}
+.bar .f-tmp{background:repeating-linear-gradient(45deg,var(--warn) 0 4px,transparent 4px 8px)}
+.bar .f-ea{background:var(--accent)}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.nums .fld output{display:block;font:700 18px var(--f-mono);padding:7px 0;color:var(--ink);letter-spacing:0}
+.quick{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.quick input{flex:1 1 90px;width:auto}
+
+/* status */
+.pts{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:600px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stat{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.stat-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 6px;flex-wrap:wrap}
+.stat-n{font:800 17px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.stat-k{font:700 11px var(--f-mono);color:var(--muted)}
+.stat-v{font:800 56px/1 var(--f-display)}
+.stat-sub{font-size:12px;color:var(--muted);min-height:2.7em;line-height:1.35}
+.stat-ctl{display:flex;gap:6px;align-items:center}
+.stat-ctl .icon{flex:1;width:auto}
+
+/* combate */
+.bigroll{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);cursor:pointer;text-align:left}
+.bigroll:hover{filter:brightness(1.08)}
+.bigroll span{font:800 26px/1 var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+.bigroll b{font:700 18px var(--f-mono)}
+.combat-note{margin-top:10px;font-size:13px;color:var(--muted)}
+.free{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.free .row{display:flex;gap:8px}
+.free small{display:block;margin-top:6px;font:500 12px var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.free small.err,.err{color:var(--hot)}
+
+/* inata */
+.inata-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}
+.inata-head h3{font:800 34px/1 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
+.cap{font:700 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.desc{margin-top:2px;max-width:70ch}
+.abils{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin-top:16px}
+.abil{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;min-width:0}
+.abil:hover{border-color:var(--accent)}
+.abil.lack{opacity:.5}
+.abil.dom{grid-column:1/-1;border-color:var(--accent);background:var(--accent-soft)}
+.abil.dom .abil-desc{color:var(--ink);max-width:80ch}
+.abils:empty{display:none}
+.modos-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+.modos-h .cap{margin-top:0}
+.modos-note{font-size:13px;margin-top:4px}
+.abil.modo{cursor:default}
+.abil.modo:hover{border-color:var(--line)}
+.abil.modo.on,.abil.modo.on:hover{border-color:var(--accent);background:var(--accent-soft)}
+.abil.modo .btn{align-self:flex-start}
+.abil-wide{grid-column:1/-1;cursor:default}
+.abil-wide:hover{border-color:var(--line)}
+.weap-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin-top:6px}
+.weap{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;min-width:0}
+.weap:hover{border-color:var(--accent)}
+.weap.lack{opacity:.55}
+.weap b{font:800 19px/1 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.weap span{font-size:12px;color:var(--muted)}
+.abil-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.abil-top b{font:800 21px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.cost{font:700 12px var(--f-mono);color:var(--accent-text);white-space:nowrap}
+.abil-desc{font-size:13px;color:var(--muted)}
+.abil-math{display:flex;gap:6px;flex-wrap:wrap}
+.abil-math em{font-style:normal}
+.empty{padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);margin-top:14px}
+
+/* inventário */
+.inv{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:560px){.inv{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.inv{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.slot{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.slot.is-arma{border-color:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.slot.empty-slot{border-style:dashed;background:transparent;align-items:center;justify-content:center;min-height:150px;color:var(--muted)}
+.slot-h{display:flex;align-items:center;gap:10px}
+.slot-n{font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:auto}
+.chk{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer}
+.chk input{width:16px;height:16px;accent-color:var(--accent)}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:7px;font-weight:700;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.slot-d{display:flex;flex-direction:column;gap:8px}
+.slot-d .chips{display:flex;gap:6px;flex-wrap:wrap}
+.calc{font:500 12px var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.hint{font-size:12px;color:var(--muted);margin-top:12px}
+
+/* dados / painel */
+.data textarea{font:500 12px/1.4 var(--f-mono);min-height:140px}
+.data .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* dock de rolagens */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.dock-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center}
+.dock-main{min-width:0}
+.dock-main.pop{animation:pop .28s ease-out}
+@keyframes pop{from{transform:translateY(6px);opacity:.3}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.dock-main.pop{animation:none}.bar i{transition:none}}
+.dg-t{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.dg-t b{font:800 20px/1.1 var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+.dg-t span{font-size:12px;color:var(--muted)}
+.dg-t .cost{color:var(--accent-text)}
+.dg-l{display:flex;flex-wrap:wrap;gap:4px 26px;margin-top:2px}
+.ln{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;min-width:0}
+.ln .lbl{font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ln .tot{font:700 30px/1.1 var(--f-mono);font-variant-numeric:tabular-nums}
+.ln .flag{font:700 11px var(--f-mono);text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:999px}
+.ln.crit .flag{background:var(--accent);color:var(--on-accent)}
+.ln.falha .flag{background:var(--hot);color:#fff}
+.ln.crit .tot{color:var(--accent-text)}
+.ln.falha .tot{color:var(--hot)}
+.ln .det{flex-basis:100%;font:500 12px var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.dock-empty{color:var(--muted)}
+.notice{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:100%;margin-bottom:8px;max-width:min(520px,calc(100% - 32px));
+  background:var(--accent);color:var(--on-accent);border-radius:8px;padding:8px 12px;font-weight:700;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.hist{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:100%;margin-bottom:8px;width:min(440px,calc(100% - 32px));max-height:50vh;overflow:auto;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:0 8px 30px rgba(0,0,0,.28);display:flex;flex-direction:column;gap:6px}
+.dock-btns{display:flex;gap:6px;align-items:center}
+.dock.mini{padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+.dock.mini .dock-main{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 14px}
+.dock.mini .dg-t span:not(.cost){display:none}
+.dock.mini .dg-t b{font-size:16px}
+.dock.mini .dg-l{margin-top:0;gap:0 14px}
+.dock.mini .ln .tot{font-size:18px}
+.dock.mini .ln .det{display:none}
+.hist-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;font-size:13px;padding:4px 0;border-bottom:1px solid var(--line)}
+.hist-row time{font:500 12px var(--f-mono);color:var(--muted)}
+.hist-row span{overflow-wrap:anywhere}
+.hist-row b{font-family:var(--f-mono)}
+.hist-tools{display:flex;justify-content:flex-end}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="mark" aria-hidden="true">呪</div>
+    <div class="top-in">
+      <p class="eyebrow">呪術廻戦 · Ficha de personagem</p>
+      <h1 id="hdrName">Personagem sem nome</h1>
+      <p class="top-sub" id="hdrSub"></p>
+    </div>
+    <div class="top-tools">
+      <button class="btn" data-act="data" id="btnData" aria-expanded="false">Salvar / carregar</button>
+      <button class="btn hot" data-act="nova" id="btnReset">Resetar ficha</button>
+    </div>
+  </header>
+
+  <div class="banner" id="exBanner" hidden>
+    <p>Esta é uma ficha de exemplo, para você testar as rolagens e o inventário. Quando quiser criar a sua, comece uma ficha em branco.</p>
+    <div>
+      <button class="btn primary" data-act="nova">Nova ficha em branco</button>
+      <button class="btn" data-act="keepEx">Manter e editar</button>
+    </div>
+  </div>
+
+  <section class="card data" id="dataPanel" hidden>
+    <h2>Salvar / carregar</h2>
+    <p class="muted" style="margin-bottom:10px">A ficha é salva sozinha neste navegador. Para levar para outro aparelho, copie o texto abaixo e cole na ficha de lá.</p>
+    <label class="fld" for="dataText">Dados da ficha<textarea id="dataText" spellcheck="false"></textarea></label>
+    <div class="row">
+      <button class="btn primary" data-act="copy">Copiar</button>
+      <button class="btn" data-act="load">Carregar deste texto</button>
+      <button class="btn hot" data-act="nova" id="btnNova2">Apagar e começar do zero</button>
+    </div>
+  </section>
+
+  <main class="grid">
+    <section class="card a-ident">
+      <div class="ident">
+        <label class="fld" for="nome">Personagem<input type="text" id="nome" autocomplete="off" placeholder="Nome do personagem"></label>
+        <label class="fld" for="jogador">Jogador<input type="text" id="jogador" autocomplete="off" placeholder="Seu nome"></label>
+        <label class="fld" for="grau">Grau<select id="grau"></select>
+          <small style="text-transform:none;letter-spacing:0;font-weight:400">Cada grau acima do Grau 4 dá +1 ponto de atributo.</small></label>
+        <div class="fld">Nível (máx. 15)
+          <div class="lvl">
+            <button class="icon" data-act="nivel-" aria-label="Diminuir nível">−</button>
+            <b id="nivel">1</b>
+            <button class="icon" data-act="nivel+" aria-label="Aumentar nível">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card a-vitals">
+      <div class="vital">
+        <div class="vital-h"><h3>Pontos de vida<span class="jp">生命</span></h3><span class="formula" id="pvFormula"></span></div>
+        <div class="big"><span id="pvBig">0</span><small>/ <span id="pvBigMax">0</span></small></div>
+        <div class="bar" aria-hidden="true"><i class="f-pv" id="pvBar"></i><i class="f-tmp" id="pvTmpBar"></i></div>
+        <div class="nums">
+          <label class="fld" for="pvAtual">Atuais<input type="number" id="pvAtual" min="0" inputmode="numeric"></label>
+          <div class="fld">Máximos<output id="pvMax">0</output></div>
+          <label class="fld" for="pvTemp">Temporários<input type="number" id="pvTemp" min="0" inputmode="numeric"></label>
+        </div>
+        <div class="quick">
+          <input type="number" id="pvAmt" min="1" placeholder="valor" aria-label="Valor de dano ou cura" inputmode="numeric">
+          <button class="btn hot" data-act="pvDano">Sofrer dano</button>
+          <button class="btn" data-act="pvCura">Curar</button>
+        </div>
+      </div>
+      <div class="vital">
+        <div class="vital-h"><h3>Energia amaldiçoada<span class="jp">呪力</span></h3><span class="formula" id="eaFormula"></span></div>
+        <div class="big"><span id="eaBig">0</span><small>/ <span id="eaBigMax">0</span></small></div>
+        <div class="bar" aria-hidden="true"><i class="f-ea" id="eaBar"></i></div>
+        <div class="nums" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+          <label class="fld" for="eaAtual">Atual<input type="number" id="eaAtual" min="0" inputmode="numeric"></label>
+          <div class="fld">Máxima<output id="eaMax">0</output></div>
+        </div>
+        <div class="quick">
+          <input type="number" id="eaAmt" min="1" placeholder="valor" aria-label="Valor de energia" inputmode="numeric">
+          <button class="btn" data-act="eaGasta">Gastar</button>
+          <button class="btn" data-act="eaRec">Recuperar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card a-status">
+      <div class="card-h">
+        <h2>Status<span class="jp">能力</span></h2>
+        <div class="pts"><span class="muted">Pontos distribuídos</span><span class="chip" id="ptsChip">0 / 10</span>
+          <span class="extra"><label class="muted" for="extras">Pontos extras</label>
+            <button class="icon" data-act="extra-" aria-label="Tirar um ponto extra">−</button>
+            <input type="number" id="extras" min="0" inputmode="numeric" aria-label="Pontos extras concedidos">
+            <button class="icon" data-act="extra+" aria-label="Dar um ponto extra">+</button></span></div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <p class="hint" id="ptsHint"></p>
+    </section>
+
+    <section class="card a-combat">
+      <h2>Combate<span class="jp">戦闘</span></h2>
+      <button class="bigroll" data-act="acerto"><span>Rolar acerto</span><b id="acertoFormula">1d20 + 0</b></button>
+      <p class="combat-note" id="acertoBreak"></p>
+      <p class="combat-note">O dano depende da inata ou da arma usada. Um 20 natural no d20 do acerto é crítico e dobra o dano do ataque.</p>
+      <div class="free">
+        <label class="fld" for="freeF">Rolagem livre
+          <span class="row"><input type="text" id="freeF" value="1d6+FOR" autocomplete="off" spellcheck="false"><button class="btn primary" data-act="free">Rolar</button></span>
+        </label>
+        <small id="freeHint"></small>
+      </div>
+    </section>
+
+    <section class="card a-inata">
+      <div class="card-art" id="inataArt" aria-hidden="true"></div>
+      <h2>Inata<span class="jp">術式</span></h2>
+      <label class="fld" for="inataSel" style="max-width:420px">Nome da inata<select id="inataSel"></select></label>
+      <div id="inataBody"></div>
+    </section>
+
+    <section class="card a-rev" id="revCard">
+      <div class="card-h"><h2>Técnica Reversa<span class="jp">反転</span></h2><span class="chip" id="revChip"></span></div>
+      <div id="revBody"></div>
+    </section>
+
+    <section class="card a-inv">
+      <div class="card-h">
+        <h2>Inventário<span class="jp">持物</span></h2>
+        <span class="chip" id="invCount">0/6</span>
+      </div>
+      <div class="seg" role="group" aria-label="Aba" style="margin-bottom:12px">
+        <button data-act="invTab" data-v="inv" class="on" id="tabInv" aria-pressed="true">Inventário</button>
+        <button data-act="invTab" data-v="armas" id="tabArmas" aria-pressed="false">Armas</button></div>
+      <div class="inv" id="inv"></div>
+      <div id="armasPanel" hidden></div>
+      <p class="hint">Buffs: escreva no formato <span class="mono">FOR+2, ACERTO+1, DANO+2, PV+10, EA+20</span>. Atributos aceitos: FOR, DES, CON, SAB, VON, PER. Só vale enquanto o item estiver marcado como em uso ou equipado. Dano de arma aceita dados e atributos, por exemplo <span class="mono">1d8+FOR</span>.</p>
+    </section>
+
+    <section class="card a-hist">
+      <h2>História do personagem<span class="jp">経歴</span></h2>
+      <label class="fld" for="historia"><span class="sr" style="position:absolute;left:-9999px">História</span>
+        <textarea id="historia" rows="8" placeholder="Origem, motivações, laços, medos..."></textarea></label>
+    </section>
+  </main>
+</div>
+
+<div class="dock" id="dock">
+  <div class="dock-in">
+    <div class="dock-main" id="dockMain" role="status" aria-live="polite"></div>
+    <div class="dock-btns">
+      <button class="btn" data-act="dockMin" id="btnMin" aria-expanded="true" aria-label="Recolher resultado">▾</button>
+      <button class="btn" data-act="hist" id="btnHist" aria-expanded="false">Histórico</button>
+    </div>
+    <div class="notice" id="notice" hidden></div>
+    <div class="hist" id="histBox" hidden>
+      <div class="hist-tools"><button class="btn" data-act="histClear">Limpar histórico</button></div>
+      <div id="histList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   REGISTRO DE INATAS
+   Para adicionar uma inata, copie o bloco "exemplo" e preencha.
+   Inata:      nome, descricao, buffs (passivos, mesmo formato dos itens, opcional),
+               aoUsar (função opcional para regras especiais), habilidades[]
+   Habilidade: nome, custo (EA), descricao,
+               acerto (true/false; padrão: true se tiver dano),
+               bonusAcerto (número extra no acerto),
+               dano  ("2d6+FOR+SAB")  - soma o bônus DANO dos buffs,
+               cura  ("1d6+CON")      - recupera PV na hora.
+   Fórmulas aceitam dados (2d6), números e FOR DES CON SAB VON PER NIVEL.
+   ===================================================================== */
+const INATAS = {
+  velocidade:{
+    nome:'Aceleração', principais:['DES','PER'], limites:{DES:25},
+    descricao:'Velocidade extrema: golpes instantâneos, deslocamentos que ignoram a distância e reflexos acima do normal. Concede +3 de Destreza e eleva o limite de Destreza para 25.',
+    buffs:'DES+3',
+    habilidades:[
+      {nome:'Soco Relâmpago', custo:10, dano:'1d6+DES', descricao:'Causa 1d6+Destreza de dano.'},
+      {nome:'Passo Instantâneo', custo:15, descricao:'Teleporta-se para perto de um alvo ou se afasta, podendo evitar um ataque.'},
+      {nome:'Combo Supersônico', custo:25, dano:'2d6+DES', golpes:2, descricao:'Acerta dois golpes, cada um causando 2d6+Destreza de dano.'},
+      {nome:'Reflexos Absolutos', custo:20, descricao:'Até o próximo turno, recebe +3 em testes de esquiva.'},
+      {nome:'Impacto da Velocidade', custo:35, dano:'2d8+DES', descricao:'Avança contra um alvo e causa 2d8+Destreza de dano.'},
+      {nome:'Pós-Imagem', custo:25, descricao:'Cria imagens residuais de si mesmo, dificultando que os inimigos acertem seus ataques por 1 turno.'},
+      {nome:'Expansão de Domínio: Mundo Acelerado', custo:100, dominio:true, acerto:false,
+       descricao:'Dura 3 turnos. O usuário se move tão rápido que parece estar em vários lugares ao mesmo tempo. Se vencer o confronto de domínios: o tempo parece parar para os adversários e somente o usuário age durante os 3 turnos, podendo usar suas habilidades pagando os custos normalmente. Se perder o confronto: o usuário ainda recebe velocidade extrema durante 30 segundos, ganhando +5 em testes de esquiva.'}
+    ]
+  },
+  sombras:{
+    nome:'Dez Sombras', principais:['SAB'], turnos:true, modosTitulo:'Expansão de Domínio',
+    descricao:'Estilo: invocação de shikigamis, combate estratégico e controle das sombras. Atributo principal: Sabedoria. Passiva, Manipulação das Sombras: guarda objetos e armas simples nas sombras e pode usá-las para se esconder parcialmente e surpreender adversários. Invocar um shikigami exige pagar seu custo de energia. Os shikigamis podem ser atacados e derrotados, e um shikigami destruído não pode ser invocado de novo durante o mesmo combate, salvo regra especial. Mahoraga não é uma invocação comum: o ritual e a capacidade de adaptação dele precisam de regras próprias, definidas pelo mestre.',
+    buffs:'',
+    modos:[
+      {id:'dominio', nome:'Expansão de Domínio: Jardim das Sombras Quiméricas', custo:100, duracao:3,
+        descricao:'Dura 3 turnos. Território de Sombras: Megumi se movimenta pelas sombras do campo. Invocações Múltiplas: até 3 shikigamis ativos ao mesmo tempo. Ataque das Sombras: uma vez por turno, um ataque adicional de um shikigami ativo (use a habilidade abaixo). Mobilidade Sombria: +3 em testes de esquiva dentro do domínio. Pressão das Sombras: os inimigos recebem −2 em testes de percepção contra Megumi.'}
+    ],
+    habilidades:[
+      {nome:'Cães Divinos', custo:15, dano:'2d8+SAB', descricao:'Invoca os Cães Divinos para atacar um inimigo. Podem rastrear alvos próximos.'},
+      {nome:'Nue', custo:20, dano:'2d8+SAB', resiste:'Se o alvo falhar em um teste de Constituição, recebe −2 em Destreza no próximo turno.', resisteAttr:'CON', resisteChip:'Constituição', descricao:'Invoca um shikigami voador que ataca com eletricidade.'},
+      {nome:'Sapo', custo:15, dano:'1d8+SAB', resiste:'Se o alvo falhar em um teste de Força, fica preso por 1 turno.', resisteAttr:'FOR', resisteChip:'Força', descricao:'Invoca sapos que usam suas línguas para prender um inimigo.'},
+      {nome:'Grande Serpente', custo:25, dano:'3d8+SAB', resiste:'Se o alvo falhar em um teste de Destreza, perde a movimentação no próximo turno.', resisteAttr:'DES', resisteChip:'Destreza', descricao:'Invoca uma serpente gigante para atacar e imobilizar o alvo.'},
+      {nome:'Elefante Máximo', custo:30, dano:'3d10+SAB', acerto:false, resiste:'Os alvos podem tentar evitar o ataque com um teste de Destreza.', resisteAttr:'DES', resisteChip:'Destreza', descricao:'Invoca um enorme elefante que libera uma grande quantidade de água. Atinge uma área e pode empurrar os inimigos.'},
+      {nome:'Coelhos de Fuga', custo:20, descricao:'Invoca uma multidão de coelhos para confundir os adversários. Durante 1 turno, os inimigos recebem −3 em testes para acertar Megumi. Não causa dano diretamente.'},
+      {nome:'Combinação das Sombras', custo:35, dano:'4d8+SAB', descricao:'Combina dois shikigamis já invocados para realizar um ataque coordenado. Os dois shikigamis precisam estar disponíveis.'},
+      {nome:'Jardim das Sombras', custo:40, descricao:'Megumi se funde às sombras para se movimentar rapidamente pelo campo. Recebe +3 em testes de esquiva por 2 turnos e pode surgir de uma sombra próxima para realizar um ataque surpresa.'},
+      {nome:'Arma das Sombras', custo:20, descricao:'Armazena ou manifesta uma arma simples através das sombras. A arma causa seu dano normal e pode ser guardada de novo nas sombras quando quiser. Para atacar com ela, adicione a arma ao inventário (aba Armas).'},
+      {nome:'Totalidade', custo:40, dano:'4d10+SAB', descricao:'Combina as características de shikigamis disponíveis para criar uma manifestação mais poderosa. Só pode ser usada se houver shikigamis compatíveis disponíveis, e a combinação precisa ser aprovada pelo mestre.'},
+      {nome:'Ataque das Sombras (domínio)', custo:0, dano:'2d8+SAB', descricao:'Só durante a Expansão de Domínio, uma vez por turno: ataque adicional de um shikigami ativo. Não gasta energia.', usoTurno:'turno_atksombra'}
+    ]
+  },
+  gelo:{
+    nome:'Zero Absoluto', principais:['FOR'], turnos:true, modosTitulo:'Expansão de Domínio',
+    marcas:{dominio:'dominio'}, extraDano:{modo:'dominio',dado:'1d6'},
+    descricao:'Estilo: armas de gelo, ataques congelantes e controle do campo de batalha. Atributo principal: Força. Passiva, Frio Cortante: cada habilidade de gelo que acerta aplica 1 Marca de Gelo; ao acumular 3 marcas, o alvo recebe −2 em Destreza por 2 turnos, e depois as marcas desaparecem. Armas da técnica: Espada Glacial e Lança Glacial. As demais habilidades são ataques ou técnicas de controle.',
+    buffs:'',
+    modos:[
+      {id:'dominio', nome:'Expansão de Domínio: Reino do Zero Absoluto', custo:100, duracao:3,
+        descricao:'Dura 3 turnos. Inimigos dentro do domínio recebem −2 em Destreza. Habilidades de gelo causam +1d6 de dano (a ficha já soma). Cada habilidade que acerta aplica 2 Marcas de Gelo. Ao acumular 3 marcas, o alvo fica congelado e perde o próximo turno.'}
+    ],
+    habilidades:[
+      {nome:'Espada Glacial', custo:15, dano:'1d8+FOR+2', gelo:true, descricao:'Cria uma espada de gelo. Dano: 1d8+Força. Enquanto estiver usando a espada, +2 de dano em ataques corpo a corpo (já somado na fórmula).'},
+      {nome:'Lança Glacial', custo:20, dano:'2d6+FOR', gelo:true, descricao:'Cria uma lança de gelo. Dano: 2d6+Força.'},
+      {nome:'Lança Glacial: alvo a mais de 5 m', custo:20, dano:'2d6+FOR+2', gelo:true, descricao:'A mesma Lança Glacial, com +2 de dano porque o alvo está a mais de 5 metros.'},
+      {nome:'Estacas Congelantes', custo:25, dano:'2d8+FOR', gelo:true, descricao:'Faz estacas de gelo surgirem do chão. Dano: 2d8+Força.'},
+      {nome:'Espelho Glacial', custo:30, reflete:true, cooldown:'espelho',
+        descricao:'Só como contra-ataque, quando um inimigo atacar o usuário (não pode iniciar um ataque no próprio turno). Cria um espelho de gelo que tenta refletir o ataque, devolvendo metade do dano original. Acerto crítico: o inimigo recebe o dobro do dano original. Falha crítica: o espelho quebra e você recebe o dobro do dano que receberia. Recarga: uma vez a cada 2 turnos. Só funciona contra ataques com projétil físico ou energético que possam ser refletidos.'},
+      {nome:'Prisão de Gelo', custo:30, resiste:'O alvo fica preso por 1 turno e pode tentar escapar com um teste de Força ou Destreza.', resisteAttr:'FOR/DES', resisteChip:'Força ou Destreza',
+        descricao:'Prende o alvo em gelo por 1 turno. O alvo pode tentar escapar com um teste de Força ou Destreza.'},
+      {nome:'Tempestade Polar', custo:35, dano:'3d6+FOR', acerto:false, gelo:true, descricao:'Cria uma tempestade de gelo em uma área. Dano: 3d6+Força aos inimigos atingidos.'},
+      {nome:'Dragão Glacial', custo:50, dano:'4d6+FOR', gelo:true, descricao:'Invoca um dragão de gelo que avança contra o alvo. Dano: 4d6+Força.'}
+    ]
+  },
+  adaptacao:{
+    nome:'Resiliência Irrefreável', principais:['VON'], turnos:true, modosTitulo:'Adaptações',
+    zeraSemEnergia:true, exaustao:'exaustao', exclusivo:'vontade', temElemento:true,
+    testeVontade:[{ate:2,dc:10},{ate:4,dc:15},{ate:6,dc:20},{ate:7,dc:25}],
+    descricao:'Estilo: adaptação, evolução física e superação dos limites do próprio corpo. Atributo principal: Vontade. Você pode manter várias adaptações ligadas ao mesmo tempo, mas quanto mais poderes usar, mais energia gasta e mais difícil fica controlar a técnica. Cada adaptação tem custo próprio de ativação e custa 10 de energia por turno para manter. No fim de cada turno você faz um teste de Vontade (d20 + Vontade): 1 a 2 adaptações, dificuldade 10; 3 a 4, dificuldade 15; 5 a 6, dificuldade 20; 7, dificuldade 25. Se falhar, todas são desativadas e você pode tentar de novo no turno seguinte, pagando os custos. Se a energia acabar, todas as adaptações se desativam na hora. Não possui Expansão de Domínio: o poder máximo é a Vontade Irrefreável.',
+    buffs:'',
+    habilidades:[],
+    modos:[
+      {id:'forca', adaptacao:true, nome:'Adaptação de Força', custo:15, manutencao:10, cada:1, buffs:'FOR+2', descricao:'Recebe +2 de Força enquanto estiver ativa.'},
+      {id:'resistencia', adaptacao:true, nome:'Resistência Irrefreável', custo:20, manutencao:10, cada:1, buffs:'RES+10', descricao:'Recebe 10 pontos de redução de dano contra ataques recebidos.'},
+      {id:'elemental', adaptacao:true, nome:'Adaptação Elemental', custo:25, manutencao:10, cada:1, descricao:'Escolhe um elemento ou tipo de dano (campo abaixo) e reduz em 10 o dano recebido desse tipo.'},
+      {id:'regeneracao', adaptacao:true, nome:'Regeneração Adaptativa', custo:30, manutencao:10, cada:1, aoAtivar:{cura:'2d8'}, descricao:'Recupera 2d8 de vida ao ativar.'},
+      {id:'velocidade', adaptacao:true, nome:'Adaptação de Velocidade', custo:25, manutencao:10, cada:1, buffs:'DES+2', descricao:'Recebe +2 de Destreza enquanto estiver ativa.'},
+      {id:'contra', adaptacao:true, nome:'Contra-adaptação', custo:35, manutencao:10, cada:1, descricao:'Depois de sofrer um ataque, recebe 15 pontos de redução de dano contra ataques semelhantes (aplicado pelo mestre).'},
+      {id:'evolucao', adaptacao:true, nome:'Evolução Física', custo:40, manutencao:10, cada:1, buffs:'FOR+2, DES+2, CON+2', descricao:'Recebe +2 de Força, +2 de Destreza e +2 de Constituição enquanto estiver ativa.'},
+      {id:'vontade', nome:'Vontade Irrefreável', custo:50, manutencao:100, cada:1, testeDC:30, requerTodos:true, buffs:'FOR+4, DES+4, CON+4, RES+15', aoAtivar:{cura:'2d8'},
+        descricao:'Forma extrema, desbloqueada quando as 7 adaptações estão ativas ao mesmo tempo. Une todas elas em uma única forma: Força +4, Destreza +4, Constituição +4, redução de dano 15 contra todos os ataques, adaptação elemental de 15 contra o tipo escolhido, regeneração de 2d8 ao ativar e contra-adaptação de 20 contra ataques semelhantes. Manutenção de 100 de energia por turno e teste de Vontade com dificuldade 30 a cada turno: se falhar, a forma termina. Se a energia chegar a zero, a forma termina e você sofre −3 em Força, Destreza e Constituição por 2 turnos, ficando incapaz de ativar esta inata nesse período. Enquanto a forma estiver ativa, não é possível ativar outras habilidades separadamente.'},
+      {id:'exaustao', automatico:true, nome:'Exaustão da Vontade Irrefreável', duracao:2, buffs:'FOR-3, DES-3, CON-3', descricao:'Energia esgotada: −3 em Força, Destreza e Constituição por 2 turnos, e a inata não pode ser ativada nesse período.'}
+    ]
+  },
+  cupido:{
+    nome:'Flecha do Cupido', principais:['SAB','VON'], turnos:true, modosTitulo:'Turnos', modos:[],
+    descricao:'Estilo: manipulação mental, comandos e dano psíquico. Atributos principais: Sabedoria e Vontade. A técnica não usa flechas de verdade: o usuário invade a mente do alvo e impõe comandos que ele precisa tentar resistir. Resistência Mental: alvos com Vontade alta têm mais facilidade para resistir aos comandos; ordens que coloquem o alvo em perigo extremo podem receber bônus no teste de resistência; um mesmo alvo não pode ficar paralisado por essa técnica em turnos consecutivos. Não possui Expansão de Domínio: o poder vem das decisões que o usuário consegue impor ao adversário, e não de um domínio.',
+    buffs:'',
+    habilidades:[
+      {nome:'Comando Simples', custo:10, resiste:'O alvo pode resistir com um teste de Vontade.',
+        descricao:'Dá uma ordem curta ao alvo, como parar ou recuar. O alvo pode resistir com um teste de Vontade.'},
+      {nome:'Ataque Forçado', custo:20, resiste:'O alvo pode resistir com um teste de Vontade.',
+        descricao:'Tenta obrigar o alvo a atacar alguém escolhido pelo usuário. O alvo pode resistir com um teste de Vontade.'},
+      {nome:'Dor Mental', custo:20, dano:'2d6+SAB', acerto:false, descricao:'Causa 2d6+Sabedoria de dano psíquico ao alvo.'},
+      {nome:'Paralisia Mental', custo:30, resiste:'Se o alvo falhar no teste de Vontade, fica sem agir por 1 turno.',
+        semConsecutivo:'paralisia', semMsg:'Se este alvo foi paralisado no turno anterior, a paralisia não funciona nele.',
+        descricao:'Se o alvo falhar em um teste de Vontade, fica sem agir por 1 turno. Um mesmo alvo não pode ficar paralisado em turnos consecutivos.'},
+      {nome:'Ordem Complexa', custo:35, resiste:'O alvo pode resistir com um teste de Vontade.',
+        descricao:'Impõe uma ordem mais elaborada, como largar uma arma ou afastar-se de um aliado. O alvo pode resistir com um teste de Vontade.'},
+      {nome:'Colapso Psíquico', custo:50, dano:'3d8+SAB', acerto:false, efeito:'O alvo recebe -2 no próximo teste de Vontade.',
+        descricao:'Sobrecarrega a mente do alvo, causando 3d8+Sabedoria de dano psíquico. O alvo recebe -2 no próximo teste de Vontade.'}
+    ]
+  },
+  sangue:{
+    nome:'Manipulação de Sangue', principais:['DES','CON'], turnos:true,
+    modosTitulo:'Efeitos sustentados',
+    descricao:'Inspiração: Choso, de Jujutsu Kaisen. Estilo: disparos de sangue comprimido, combate próximo e controle do campo de batalha. Atributo de dano: Destreza. Regra especial, Reserva de sangue: além da energia, a inata usa uma barra de sangue (máximo 100). Cada ataque gasta sangue: 10 se o usuário é humano, 5 se é feto amaldiçoado.',
+    buffs:'',
+    origens:[
+      {id:'humano',nome:'Humano',sangueMax:100,custoAtaque:10,texto:'Humano: reserva de 100 de sangue. Cada ataque gasta 10 de sangue.'},
+      {id:'feto',nome:'Feto Amaldiçoado',sangueMax:150,custoAtaque:5,buffs:'EA+200',texto:'Feto amaldiçoado: +200 de energia máxima e +50 de reserva de sangue (150 no total). Cada ataque gasta apenas 5 de sangue.'}
+    ],
+    estados:[{id:'areaPreparada',nome:'Área preparada (Explosão Carmesim)'}],
+    modos:[
+      {id:'endurecimento',nome:'Endurecimento Sanguíneo',custo:20,buffs:'RES+10',
+        descricao:'Reveste o corpo com sangue endurecido: 10 pontos de redução de dano contra cada ataque recebido. A cada 3 turnos paga mais 20 de energia para manter o efeito. Pode desativar quando quiser. Se não conseguir pagar a manutenção, o efeito termina.'},
+      {id:'dominio',nome:'Expansão de Domínio: Mar de Sangue',custo:100,duracao:3,buffs:'DANO+2',
+        descricao:'O ambiente é inundado por sangue controlado pelo usuário, dificultando a movimentação e a defesa dos adversários. Defesa comprometida: os inimigos recebem -5 em testes de esquiva ou bloqueio contra os ataques do usuário dentro do domínio (só vale dentro do domínio e não reduz o acerto dos inimigos contra outros alvos). Sangue por toda parte: a Explosão Carmesim já começa com o ambiente preparado e pode ser detonada sem gastar um turno espalhando sangue. Controle sanguíneo: os ataques de Manipulação de Sangue recebem +2 de dano.'}
+    ],
+    habilidades:[
+      {nome:'Disparo de Sangue', custo:10, dano:'1d8+DES', sangue:true, descricao:'Dispara um projétil de sangue comprimido, causando 1d8+Destreza de dano.'},
+      {nome:'Punho Sanguíneo', custo:20, dano:'2d8+DES', sangue:true, descricao:'Concentra sangue nos punhos e desfere um golpe poderoso, causando 2d8+Destreza de dano.'},
+      {nome:'Perfuração Carmesim', custo:25, dano:'3d6+DES', bonusAcerto:-2, sangue:true, descricao:'Comprime o sangue e dispara um feixe extremamente rápido em linha reta, causando 3d6+Destreza de dano. Recebe -2 no acerto.'},
+      {nome:'Chicote Sanguíneo', custo:20, dano:'1d10+DES', sangue:true, descricao:'Cria um chicote de sangue que causa 1d10+Destreza de dano e pode puxar um alvo próximo.'},
+      {nome:'Explosão Carmesim: Preparar', custo:35, ativa:'areaPreparada', ativaTurno:'turno_preparou',
+        descricao:'O usuário espalha sangue pelo ambiente durante 1 turno, preparando a área. No turno seguinte, pode detonar o sangue espalhado.'},
+      {nome:'Explosão Carmesim: Detonar', custo:0, dano:'3d8+DES', acerto:false, sangue:true,
+        requerEstado:'areaPreparada', dispensadoPor:'dominio', consome:'areaPreparada', esperaTurno:'turno_preparou',
+        requerMsg:'Prepare a área primeiro com "Explosão Carmesim: Preparar", ou ative o domínio.',
+        esperaMsg:'Espere o próximo turno para detonar. Clique em "Passar turno".',
+        descricao:'No turno seguinte ao preparo, detona o sangue espalhado, causando 3d8+Destreza de dano aos inimigos na área preparada.'},
+      {nome:'Wave de Sangue', custo:100, dano:'5d8+DES', bonusAcerto:-1, sangue:true, usoTurno:'turno_wave',
+        descricao:'Dispara um enorme feixe contínuo de sangue comprimido em linha reta, causando 5d8+Destreza de dano. Recebe -1 no acerto, atinge os inimigos no caminho e não atravessa barreiras sólidas. Só pode ser usada uma vez por turno.'},
+      {nome:'Carregar Sangue', custo:0, recarga:.5, descricao:'Passe 1 turno para recarregar metade da reserva de sangue.'},
+      {nome:'Recarga Total', custo:0, recarga:1, descricao:'Passe 2 turnos para recarregar toda a reserva de sangue.'},
+      {nome:'Regeneração Sanguínea', custo:10, regen:{sangue:.25,cura:.3}, descricao:'Gasta 25% do sangue que você tem na reserva e 10 de energia para curar 30% do seu PV máximo.'}
+    ]
+  },
+  itadori:{
+    nome:'Itadori', principais:['FOR'],
+    descricao:'Estilo: combate corpo a corpo, força física e sequências de golpes. Atributo principal: Força. Especialidade: lutar sem depender de técnicas complexas. A ideia é ser perigoso pela habilidade de luta e pelos golpes bem executados, sem depender de danos gigantescos em todos os ataques.',
+    buffs:'',
+    estados:[
+      {id:'determinacao', nome:'Determinação de Itadori', buffs:'RES+10'},
+      {id:'kokusenDom', nome:'Flash Negro do domínio já usado'}
+    ],
+    habilidades:[
+      {nome:'Soco Divergente', custo:15, dano:'2d8+FOR', descricao:'Um soco seguido por um segundo impacto de energia, causando 2d8+Força de dano.'},
+      {nome:'Sequência de Golpes', custo:15, dano:'1d8+FOR', golpes:2, descricao:'Acerta dois socos, cada um causando 1d8+Força de dano.'},
+      {nome:'Kokusen: Flash Negro', custo:25, dano:'4d8+FOR', bonusAcerto:-3, descricao:'Um golpe preciso que causa 4d8+Força de dano. Tem -3 no acerto: por ser um ataque muito forte, a pessoa precisa se concentrar, e por isso é mais difícil de acertar.'},
+      {nome:'Avanço Brutal', custo:15, dano:'1d12+FOR', descricao:'Aproxima-se do inimigo e desfere um golpe que causa 1d12+Força de dano.'},
+      {nome:'Determinação de Itadori', custo:20, requer:'pv25', ativa:'determinacao',
+        descricao:'Recupera-se do cansaço e recebe +10 em resistência física durante o combate, reduzindo o dano tomado. Só pode ser usada com 25% ou menos de vida.'},
+      {nome:'Expansão de Domínio: Clube da Luta', custo:100, dominio:true, acerto:false,
+        descricao:'Técnicas amaldiçoadas ficam bloqueadas para todos dentro do ringue. Os participantes só podem usar golpes físicos, esquivas e movimentos corporais, e os atributos físicos continuam funcionando normalmente. O usuário não recebe bônus exagerados: sua vantagem é a experiência no combate corpo a corpo.'},
+      {nome:'Flash Negro do Domínio', custo:0, dano:'2d8+FOR', bonusAcerto:-3, usoUnico:'kokusenDom',
+        descricao:'Regra especial do Clube da Luta: uma vez durante o domínio, o usuário pode usar o Flash Negro por 2d8+Força de dano.'}
+    ]
+  },
+  restricao:{
+    nome:'Restrição Celestial', principais:['FOR','DES','CON'],
+    descricao:'Estilo: combatente físico que abandona a energia amaldiçoada para ultrapassar os limites humanos. Esta inata não tem lista de ataques: ela tem dois despertares permanentes, que fortalecem o personagem de maneiras diferentes. A katana continua sendo a arma principal e os ataques dependem dos atributos físicos. A ideia central: abrir mão de qualquer técnica amaldiçoada para se tornar um monstro no combate físico.',
+    buffs:'',
+    habilidades:[],
+    despertares:[
+      {id:'rc', nome:'1. Despertar: Restrição Celestial', buffs:'FOR+3, DES+3, CON+3', eaFixa:1,
+        efeitos:[
+          {nome:'Energia amaldiçoada',texto:'reduzida permanentemente a 1.'},
+          {nome:'Aplicação',texto:'o corpo desperta o verdadeiro potencial físico. Os bônus são aplicados uma única vez, quando a Restrição Celestial desperta.'}
+        ]},
+      {id:'ze', nome:'2. Despertar: Zero Energia', citacao:'Desprenda-se das correntes do mundo.', eaFixa:0, reflexo:true,
+        buffs:'FOR+4, DES+4, CON+3, SAB+3, VON+3, PER+3',
+        efeitos:[
+          {nome:'Energia amaldiçoada',texto:'reduzida permanentemente a 0. Não pode usar técnicas amaldiçoadas nem gastar energia amaldiçoada.'},
+          {nome:'Bônus',texto:'somam-se aos da Restrição Celestial. O segundo despertar só acontece depois do primeiro.'},
+          {nome:'Resistência a Domínios',texto:'imune aos efeitos de algumas Expansões de Domínio que dependam de detectar ou atingir alvos por meio de energia amaldiçoada. Domínios com efeitos físicos ou regras especiais ainda podem afetá-lo.'},
+          {nome:'Reflexo Instintivo',texto:'uma vez por combate, pode tentar esquivar automaticamente de um ataque, usando sua Destreza. Não funciona contra ataques inevitáveis ou efeitos que não possam ser esquivados.'}
+        ]}
+    ]
+  },
+  tsukumo:{
+    nome:'Técnica do Clã Tsukumo', principais:['FOR','CON'],
+    descricao:'Estilo: fortalecimento próprio por meio da massa virtual. Atributos principais: Força e Constituição. Você escolhe um modo de massa e o mantém ativo até decidir desativá-lo. Só um modo fica ativo por vez: ativar outro desativa o anterior. Cada modo também concede os bônus de todos os modos de porcentagem menor. A cada 3 turnos com um modo ativo, você paga de novo o custo dele como manutenção. Quanto maior a porcentagem, maior o gasto de energia.',
+    buffs:'',
+    habilidades:[],
+    modoUnico:true, acumulativo:true,
+    modos:[
+      {id:'m10', nome:'Massa de 10%', custo:5, buffs:'FOR+1'},
+      {id:'m25', nome:'Massa de 25%', custo:10, buffs:'FOR+2'},
+      {id:'m40', nome:'Massa de 40%', custo:15, buffs:'FOR+2, CON+1'},
+      {id:'m50', nome:'Massa de 50%', custo:20, buffs:'FOR+3'},
+      {id:'m75', nome:'Massa de 75%', custo:30, buffs:'FOR+3, CON+2'},
+      {id:'m100', nome:'Massa de 100%', custo:40, buffs:'FOR+3, DES+2'}
+    ]
+  },
+  armas:{
+    nome:'Armas Fantasmas', principais:['FOR'],
+    descricao:'Invoca armas espectrais que ficam no inventário até serem desconjuradas. Concede +150 de energia amaldiçoada máxima. Regra dos críticos: o resultado natural do dado define o crítico, antes dos bônus de acerto.',
+    buffs:'EA+150',
+    armas:[
+      {nome:'Espada', resumo:'+2 acerto · +4 dano · Crítico 20: dano ×2', tipo:'arma', dano:'1d8+FOR+4', bonusAcerto:2,
+        crit:{min:20,mult:2}, nota:'+2 no acerto e +4 de dano. Crítico 20: duplica o dano total do ataque.'},
+      {nome:'Machado', resumo:'+6 dano · cabeça +6 · Crítico 19–20: dano ×3', tipo:'arma', dano:'1d8+FOR+6', bonusAcerto:0,
+        crit:{min:19,mult:3}, alt:{label:'cabeça',dano:6},
+        nota:'+6 de dano. Acerto na cabeça: +6 de dano adicional. Crítico 19–20: triplica o dano total do ataque.'},
+      {nome:'Lança', resumo:'+1 acerto · +4 dano · arremessável · Crítico: dano ×3', tipo:'arma', dano:'1d8+FOR+4', bonusAcerto:1,
+        crit:{min:20,mult:3}, nota:'+4 de dano e +1 no acerto. Pode ser arremessada: quanto maior a distância, maior o dano, mas mais difícil acertar. Crítico: triplica o dano total.'},
+      {nome:'Martelo', resumo:'+5 dano · Crítico 19–20: dano ×3 e esmaga', tipo:'arma', dano:'1d8+FOR+5', bonusAcerto:0,
+        crit:{min:19,mult:3,efeito:'Alvo esmagado contra o chão: fica sem jogar por 1 turno.'},
+        nota:'+5 de dano. Crítico 19–20: triplica o dano e esmaga o alvo contra o chão, deixando-o sem jogar por 1 turno.'},
+      {nome:'Adagas', resumo:'+5 Destreza · +3 dano · Crítico: ataque extra', tipo:'arma', dano:'1d8+FOR+3', bonusAcerto:0, buffs:'DES+5',
+        crit:{min:20,mult:1,efeito:'Pode realizar outro ataque imediatamente.'},
+        nota:'+5 de Destreza e +3 de dano. Crítico: permite realizar outro ataque imediatamente.'},
+      {nome:'Escudo', resumo:'Barreira de 30 de vida para você e aliados próximos', tipo:'item', barreira:30,
+        nota:'Protege o usuário e os aliados que estiverem próximos. Quando a barreira perde os 30 pontos de vida, desaparece.'}
+    ],
+    habilidades:[
+      {nome:'Arsenal Fantasma', custo:10, dano:'1d8+FOR', descricao:'Invoca uma arma e realiza um ataque, causando 1d8+Força de dano.'},
+      {nome:'Lança Espectral', custo:15, dano:'2d6+FOR', descricao:'Arremessa uma lança contra um alvo, causando 2d6+Força de dano.'},
+      {nome:'Chuva de Lâminas', custo:30, dano:'3d6+FOR', descricao:'Invoca lâminas sobre uma área, causando 3d6+Força de dano.'},
+      {nome:'Arma Camuflada', custo:15, descricao:'Disfarça-se como uma arma para dificultar ser reconhecido.'},
+      {nome:'Rajada de Armas', custo:35, dano:'1d6+FOR', golpes:3, descricao:'Dispara três armas contra um alvo, cada uma causando 1d6+Força de dano.'},
+      {nome:'Troca Fantasma', custo:20, descricao:'Troca instantaneamente a arma que está usando por outra invocada, sem gastar uma ação de ataque. Marque a nova arma como equipada no inventário.'},
+      {nome:'Arsenal de Invocações', custo:10, invocar:true,
+        descricao:'Custa 10 de energia para invocar uma arma. A arma invocada vai para o seu inventário e some quando você a desconjura. Escolha uma:'},
+      {nome:'Expansão de Domínio: Arsenal Infinito', custo:100, dominio:true, acerto:false,
+       descricao:'O cenário vira um mundo repleto de armas fantasmas. Dura 3 turnos, e durante esse tempo chovem armas sem parar: a cada turno o inimigo sofre 3d8+Força de dano (use o botão abaixo para rolar o dano de cada turno). O usuário também pode trocar entre as armas invocadas livremente durante o domínio e utilizar seus efeitos especiais.'},
+      {nome:'Chuva de Armas (dano do turno)', custo:0, dano:'3d8+FOR', acerto:false,
+       descricao:'Use uma vez por turno enquanto a Expansão de Domínio durar (3 turnos). Não gasta energia.'}
+    ]
+  }
+};
+
+const KEY='jjk-ficha-v1';
+const STATS=[
+  {k:'FOR',n:'Força'},
+  {k:'DES',n:'Destreza'},
+  {k:'CON',n:'Constituição'},
+  {k:'SAB',n:'Sabedoria'},
+  {k:'VON',n:'Vontade'},
+  {k:'PER',n:'Percepção'}
+];
+const MAX_NIVEL=15, SLOTS=6, DES_CAP=5;
+/* Limite de pontos por status: 15, e +5 nos atributos principais da inata (campo "principais" em cada inata). */
+const STAT_MAX=15, STAT_BONUS=5;
+/* Graus, do mais fraco ao mais forte. Cada grau acima do primeiro dá +1 ponto de atributo. */
+const GRAUS=['Grau 4','Grau 3','Grau 2','Semi-Grau 1','Grau 1','Grau Especial'];
+const ALIAS={FOR:'FOR',FORCA:'FOR',DES:'DES',DESTREZA:'DES',CON:'CON',CONSTITUICAO:'CON',SAB:'SAB',SABEDORIA:'SAB',
+  VON:'VON',VONTADE:'VON',PER:'PER',PERCEPCAO:'PER',ACERTO:'ACERTO',ATK:'ACERTO',DANO:'DANO',DMG:'DANO',
+  PV:'PV',HP:'PV',VIDA:'PV',EA:'EA',CE:'EA',ENERGIA:'EA',RES:'RES',RESISTENCIA:'RES'};
+const BUFF_LABEL={ACERTO:'Acerto',DANO:'Dano',PV:'PV máx',EA:'EA máx',RES:'Resistência física'};
+const STAT_NAME=Object.fromEntries(STATS.map(s=>[s.k,s.n]));
+
+/* ---------- utilidades ---------- */
+const $=id=>document.getElementById(id);
+const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
+const int=(v,d=0)=>{const n=parseInt(v,10);return Number.isFinite(n)?n:d};
+const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
+const str=v=>typeof v==='string'?v:'';
+const sgn=n=>(n<0?'−':'+')+Math.abs(n);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rnd=f=>1+Math.floor(Math.random()*f);
+
+/* ---------- estado ---------- */
+function blank(){
+  return {nome:'',jogador:'',nivel:1,grau:0,extras:0,modos:{},desp:{},usos:{},origem:'humano',sangue:0,sangueMaxSeen:0,reversa:0,elemento:'',marcas:0,espelhoDano:'',status:{FOR:0,DES:0,CON:0,SAB:0,VON:0,PER:0},
+    pvAtual:0,pvTemp:0,eaAtual:0,pvMaxSeen:0,eaMaxSeen:0,inata:'',
+    inv:Array(SLOTS).fill(null),historia:'',exemplo:false,log:[]};
+}
+function sample(){
+  const s=blank();
+  s.nome='Personagem de Exemplo'; s.nivel=3; s.status={FOR:3,DES:4,CON:3,SAB:0,VON:1,PER:1};
+  s.inata='velocidade'; s.exemplo=true;
+  s.inv[0]={nome:'Espada Amaldiçoada',tipo:'arma',ativo:true,buffs:'DANO+1',dano:'1d8+FOR',bonus:1};
+  s.inv[1]={nome:'Amuleto de Jade',tipo:'item',ativo:true,buffs:'CON+1, PER+1',dano:'1d6+FOR',bonus:0};
+  s.historia='Escreva aqui a origem, os motivos e os laços do seu personagem.';
+  return s;
+}
+function cleanItem(s){
+  const it={nome:str(s.nome),tipo:s.tipo==='arma'?'arma':'item',ativo:s.ativo!==false,buffs:str(s.buffs),
+    dano:str(s.dano)||'1d6+FOR',bonus:int(s.bonus,0),invocada:!!s.invocada,nota:str(s.nota)};
+  if(s.crit&&typeof s.crit==='object') it.crit={min:clamp(int(s.crit.min,20),2,20),mult:clamp(int(s.crit.mult,1),1,5),efeito:str(s.crit.efeito)};
+  if(s.alt&&typeof s.alt==='object'){it.alt={label:str(s.alt.label),dano:int(s.alt.dano,0)};if(s.alt.formula) it.alt.formula=str(s.alt.formula);if(s.alt.bonus) it.alt.bonus=int(s.alt.bonus,0)}
+  if(s.musa&&typeof s.musa==='object') it.musa={nivel:clamp(int(s.musa.nivel,1),1,10),mortes:Math.max(0,int(s.musa.mortes,0)),pacto:!!s.musa.pacto,dominio:!!s.musa.dominio,colheita:!!s.musa.colheita};
+  if(s.barreira&&typeof s.barreira==='object'){const m=Math.max(1,int(s.barreira.max,1));it.barreira={max:m,atual:clamp(int(s.barreira.atual,m),0,m)}}
+  return it;
+}
+function sanitize(o){
+  const d=blank(); if(!o||typeof o!=='object') return d;
+  d.nome=str(o.nome); d.jogador=str(o.jogador); d.nivel=clamp(int(o.nivel,1),1,MAX_NIVEL);
+  d.grau=clamp(int(o.grau,0),0,GRAUS.length-1); d.extras=Math.max(0,int(o.extras,0));
+  if(o.modos&&typeof o.modos==='object') Object.keys(o.modos).forEach(k=>{d.modos[k]=Math.max(0,int(o.modos[k],0))});
+  d.reversa=clamp(int(o.reversa,0),0,3); d.elemento=str(o.elemento); d.marcas=clamp(int(o.marcas,0),0,2); d.espelhoDano=str(o.espelhoDano); d.origem=str(o.origem)||'humano'; d.sangue=Math.max(0,int(o.sangue,0)); d.sangueMaxSeen=Math.max(0,int(o.sangueMaxSeen,0));
+  ['desp','usos'].forEach(f=>{if(o[f]&&typeof o[f]==='object') Object.keys(o[f]).forEach(k=>{if(o[f][k]===true) d[f][k]=true})});
+  STATS.forEach(s=>{d.status[s.k]=Math.max(0,int(o.status&&o.status[s.k],0))});
+  ['pvAtual','pvTemp','eaAtual','pvMaxSeen','eaMaxSeen'].forEach(k=>{d[k]=Math.max(0,int(o[k],0))});
+  d.inata=INATAS[o.inata]?o.inata:'';
+  d.inv=Array.from({length:SLOTS},(_,i)=>{
+    const s=Array.isArray(o.inv)?o.inv[i]:null;
+    return s&&typeof s==='object'?cleanItem(s):null;
+  });
+  d.historia=str(o.historia); d.exemplo=!!o.exemplo;
+  d.log=(Array.isArray(o.log)?o.log:[]).filter(g=>g&&Array.isArray(g.lines)).slice(0,40);
+  return d;
+}
+let state;
+function load(){
+  try{const raw=localStorage.getItem(KEY); if(raw) return sanitize(JSON.parse(raw));}catch(e){}
+  return sample();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+
+/* ---------- buffs ---------- */
+function parseBuffs(text){
+  const out={},bad=[];
+  const s=norm(text).replace(/\s*([+-])\s*/g,'$1');
+  s.split(/[,;\s]+/).filter(Boolean).forEach(p=>{
+    const m=p.match(/^([A-Z]+)([+-])(\d+)$/);
+    if(!m||!ALIAS[m[1]]){bad.push(p);return;}
+    const k=ALIAS[m[1]]; out[k]=(out[k]||0)+(m[2]==='-'?-1:1)*int(m[3]);
+  });
+  return {buffs:out,bad};
+}
+function modoBuffs(I,m){
+  if(!I.acumulativo) return m.buffs;
+  return I.modos.slice(0,I.modos.indexOf(m)+1).map(x=>x.buffs).join(', ');
+}
+function origemAtual(I){return (I&&I.origens&&(I.origens.find(x=>x.id===state.origem)||I.origens[0]))||null}
+function modoAtivo(id){return Object.prototype.hasOwnProperty.call(state.modos||{},id)}
+function totalBuffs(){
+  const sum={};
+  const add=t=>{const r=parseBuffs(t).buffs;for(const k in r)sum[k]=(sum[k]||0)+r[k]};
+  const I=INATAS[state.inata]; if(I&&I.buffs) add(I.buffs);
+  if(I&&I.modos) I.modos.forEach(m=>{if(modoAtivo(m.id)) add(modoBuffs(I,m))});
+  if(I&&I.despertares) I.despertares.forEach(d=>{if(state.desp&&state.desp[d.id]) add(d.buffs)});
+  if(I&&I.estados) I.estados.forEach(e=>{if(e.buffs&&state.usos&&state.usos[e.id]) add(e.buffs)});
+  if(I&&I.origens){const og=origemAtual(I); if(og&&og.buffs) add(og.buffs)}
+  state.inv.forEach(s=>{if(s&&s.ativo) add(s.buffs)});
+  return sum;
+}
+function compute(){
+  const b=totalBuffs(), eff={};
+  const I0=INATAS[state.inata], pv=(I0&&I0.multPV)||8;
+  const fixos=(I0&&I0.despertares?I0.despertares:[]).filter(d=>d.eaFixa!==undefined&&state.desp[d.id]).map(d=>d.eaFixa);
+  const eaFix=fixos.length?Math.min.apply(null,fixos):null, semEA=eaFix===0;
+  STATS.forEach(s=>{eff[s.k]=state.status[s.k]+(b[s.k]||0)});
+  const desCap=Math.min(eff.DES,DES_CAP);
+  return {b,eff,desCap,acerto:desCap+(b.ACERTO||0),danoBonus:b.DANO||0,
+    pvMult:pv, pvMax:Math.max(0,eff.CON*pv+(b.PV||0)), semEA:semEA, eaFix:eaFix, eaMax:eaFix!==null?eaFix:Math.max(0,50*state.nivel+(b.EA||0))};
+}
+function statCap(k){const I=INATAS[state.inata];if(I&&I.limites&&I.limites[k]) return I.limites[k];return STAT_MAX+(I&&I.principais&&I.principais.indexOf(k)>=0?STAT_BONUS:0)}
+function pontosTotal(){return 10+(state.nivel-1)+state.grau+state.extras}
+function ctxOf(c){return Object.assign({NIVEL:state.nivel},c.eff)}
+
+/* ---------- motor de dados ---------- */
+function parseFormula(f){
+  const s=norm(f).replace(/\s+/g,'');
+  if(!s) return {error:'Fórmula vazia'};
+  const re=/([+-]?)(\d*D\d+|\d+|[A-Z]+)(?:\*(\d+))?/y, terms=[]; let pos=0;
+  while(pos<s.length){
+    re.lastIndex=pos; const m=re.exec(s);
+    if(!m) return {error:'Não entendi "'+s.slice(pos).toLowerCase()+'"'};
+    if(pos>0&&!m[1]) return {error:'Falta + ou − antes de "'+s.slice(pos).toLowerCase()+'"'};
+    pos=re.lastIndex;
+    const sign=m[1]==='-'?-1:1, mult=m[3]?int(m[3]):1, b=m[2]; let t;
+    if(/^\d*D\d+$/.test(b)){
+      const p=b.split('D'), N=p[0]?int(p[0]):1, F=int(p[1]);
+      if(N<1||N>50||F<2||F>1000) return {error:'Dado inválido: '+b.toLowerCase()};
+      t={kind:'dice',n:N,f:F};
+    }else if(/^\d+$/.test(b)){ t={kind:'num',v:int(b)}; }
+    else{
+      const key=b==='NIVEL'?'NIVEL':ALIAS[b];
+      if(!key||['ACERTO','DANO','PV','EA','RES'].includes(key)) return {error:'Atributo desconhecido: '+b};
+      t={kind:'stat',key:key};
+    }
+    t.sign=sign; t.mult=mult; terms.push(t);
+  }
+  return {terms:terms};
+}
+function rollTerms(terms,ctx,flat){
+  let total=0; const parts=[];
+  terms.forEach((t,i)=>{
+    let v,txt;
+    if(t.kind==='dice'){const r=[];let sum=0;for(let k=0;k<t.n;k++){const x=rnd(t.f);r.push(x);sum+=x}v=sum;txt=t.n+'d'+t.f+' ['+r.join(', ')+']'}
+    else if(t.kind==='num'){v=t.v;txt=String(t.v)}
+    else{v=ctx[t.key];txt=t.key+' '+v}
+    if(t.mult!==1){v*=t.mult;txt+=' ×'+t.mult}
+    total+=t.sign*v;
+    parts.push((t.sign<0?'− ':(i?'+ ':''))+txt);
+  });
+  if(flat){total+=flat;parts.push((flat<0?'− ':'+ ')+Math.abs(flat)+' bônus')}
+  return {total:total,detail:parts.join(' ')};
+}
+function previewTerms(terms,ctx,flat){
+  const dice=[]; let f=flat||0;
+  terms.forEach(t=>{
+    if(t.kind==='dice') dice.push((t.sign<0?'−':(dice.length?'+':''))+t.n+'d'+t.f+(t.mult!==1?'×'+t.mult:''));
+    else f+=t.sign*(t.kind==='num'?t.v:ctx[t.key])*t.mult;
+  });
+  let text=dice.join('');
+  if(f||!dice.length) text+=dice.length?sgn(f):(f<0?'−':'')+Math.abs(f);
+  return text;
+}
+function preview(f,c,flat){
+  const p=parseFormula(f); if(p.error) return {error:p.error};
+  return {text:previewTerms(p.terms,ctxOf(c),flat)};
+}
+
+/* ---------- rolagens ---------- */
+function d20Line(label,bonusParts,critMin){
+  const d=rnd(20); let total=d; const det=['d20 '+d];
+  bonusParts.forEach(p=>{if(p.v!==0||p.always){total+=p.v;det.push((p.v<0?'− ':'+ ')+p.t+' '+Math.abs(p.v))}});
+  return {label:label,total:total,detail:det.join(' '),flag:d>=(critMin||20)?'crit':d===1?'falha':''};
+}
+function acertoLine(c,extra,extraLabel,critMin){
+  const des={v:c.desCap,t:'DES'+(c.eff.DES>DES_CAP?' (máx)':''),always:true};
+  return d20Line('Acerto',[des,{v:c.b.ACERTO||0,t:'buffs'},{v:extra||0,t:extraLabel||'bônus'}],critMin);
+}
+function damageLine(label,f,c,withBonus){
+  const p=parseFormula(f); if(p.error) return {label:label,err:p.error};
+  const r=rollTerms(p.terms,ctxOf(c),withBonus?c.danoBonus:0);
+  return {label:label,total:Math.max(0,r.total),detail:r.detail};
+}
+function pushRoll(g){
+  g.time=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  state.log.unshift(g); state.log.length=Math.min(state.log.length,40);
+  save(); renderDock(true);
+}
+function summary(g){return g.lines.map(l=>l.err?l.label+': erro':l.label+' '+l.total).join(' · ')}
+
+/* ---------- ações do jogo ---------- */
+/* Crítico geral: 20 natural no acerto dobra o dano total do ataque (cada golpe do ataque). */
+function danoFormula(I,h){
+  let f=h.dano;
+  if(f&&I.extraDano&&h.gelo&&modoAtivo(I.extraDano.modo)) f+='+'+I.extraDano.dado;
+  return f;
+}
+function aplicarCritico(lines,mult){
+  const a=lines.find(l=>l.label==='Acerto');
+  if(!a||a.flag!=='crit'||mult<=1) return;
+  lines.forEach(l=>{if(!l.err&&/^Dano/.test(l.label)){l.total*=mult;l.detail='('+l.detail+') × '+mult+' crítico'}});
+}
+function useAbility(i){
+  const I=INATAS[state.inata]; if(!I) return;
+  const h=I.habilidades[i]; if(!h) return;
+  const c=compute(), cost=h.custo||0;
+  if(h.requer==='pv25'&&!(c.pvMax>0&&state.pvAtual*4<=c.pvMax)){notice(h.nome+' só pode ser usada com 25% ou menos de vida (até '+Math.floor(c.pvMax/4)+' PV).');return}
+  if(h.usoUnico&&state.usos[h.usoUnico]){notice(h.nome+' já foi usado. Use "Encerrar combate" para restaurar.');return}
+  if(h.usoTurno&&state.usos[h.usoTurno]){notice(h.nome+' só pode ser usada uma vez por turno. Clique em "Passar turno".');return}
+  if(h.cooldown&&(state.usos['turno_'+h.cooldown]||state.usos['ant_'+h.cooldown])){notice(h.nome+' está em recarga: só pode ser usado uma vez a cada 2 turnos. Clique em "Passar turno".');return}
+  const rd=h.reflete?int(state.espelhoDano):0;
+  if(h.reflete&&rd<=0){notice('Digite o dano do ataque recebido no campo do Espelho Glacial.');return}
+  if(h.requerEstado&&!(h.dispensadoPor&&modoAtivo(h.dispensadoPor))){
+    if(!state.usos[h.requerEstado]){notice(h.requerMsg||'Requisito não cumprido.');return}
+    if(h.esperaTurno&&state.usos[h.esperaTurno]){notice(h.esperaMsg||'Espere o próximo turno.');return}
+  }
+  if(cost>state.eaAtual){notice('Energia insuficiente: '+h.nome+' custa '+cost+' e você tem '+state.eaAtual+'.');return}
+  const og=I.origens?origemAtual(I):null, custoSangue=(h.sangue&&og)?og.custoAtaque:0;
+  if(custoSangue>state.sangue){notice('Sangue insuficiente: cada ataque gasta '+custoSangue+' e você tem '+state.sangue+'. Use Carregar Sangue.');return}
+  if(h.regen&&state.sangue<=0){notice('Sem sangue na reserva para regenerar.');return}
+  state.eaAtual-=cost; state.sangue-=custoSangue;
+  if(h.usoTurno) state.usos[h.usoTurno]=true;
+  if(h.cooldown) state.usos['turno_'+h.cooldown]=true;
+  if(h.ativaTurno) state.usos[h.ativaTurno]=true;
+  if(h.consome) delete state.usos[h.consome];
+  if(h.usoUnico) state.usos[h.usoUnico]=true;
+  if(h.ativa) state.usos[h.ativa]=true;
+  const lines=[];
+  const rollsHit=h.acerto===true||(h.acerto===undefined&&!!h.dano);
+  if(rollsHit) lines.push(acertoLine(c,h.bonusAcerto||0,'habilidade'));
+  if(h.dano){const n=h.golpes||1;for(let g=1;g<=n;g++)lines.push(damageLine(n>1?'Dano '+g:'Dano',danoFormula(I,h),c,true))}
+  aplicarCritico(lines,2);
+  if(h.reflete){
+    const a=acertoLine(c,0,'espelho'); lines.push(a);
+    if(a.flag==='crit') lines.push({label:'Refletido',total:rd*2,detail:'Acerto crítico: o inimigo recebe o dobro do dano original ('+rd+' × 2).'});
+    else if(a.flag==='falha') lines.push({label:'Espelho quebrou',total:rd*2,detail:'Falha crítica: você recebe o dobro do dano que receberia ('+rd+' × 2).'});
+    else lines.push({label:'Reflexo',total:Math.floor(rd/2),detail:'Se o espelho refletir o ataque, o inimigo recebe metade do dano original ('+rd+' ÷ 2).'});
+    state.espelhoDano='';
+  }
+  if(h.resiste) lines.push({label:'Resistência',total:h.resisteAttr||'VON',detail:h.resiste});
+  if(h.gelo&&I.marcas) lines.push({label:'Marca de Gelo',total:'+1',detail:'Se acertou, aplique a marca no painel Marcas de Gelo.'});
+  if(h.semConsecutivo){
+    if(state.usos['ant_'+h.semConsecutivo]) lines.push({label:'Atenção',total:'!',detail:h.semMsg||'Efeito não pode se repetir em turnos consecutivos no mesmo alvo.'});
+    state.usos['turno_'+h.semConsecutivo]=true;
+  }
+  if(h.efeito) lines.push({label:'Efeito',total:'!',detail:h.efeito});
+  if(h.cura){
+    const l=damageLine('Cura',h.cura,c,false);
+    if(!l.err){const before=state.pvAtual;state.pvAtual=Math.min(c.pvMax,state.pvAtual+l.total);l.detail+=' → +'+(state.pvAtual-before)+' PV'}
+    lines.push(l);
+  }
+  if(h.regen){
+    const gasto=Math.floor(state.sangue*h.regen.sangue), cura=Math.floor(c.pvMax*h.regen.cura), antes=state.pvAtual;
+    state.sangue-=gasto; state.pvAtual=Math.min(c.pvMax,state.pvAtual+cura);
+    lines.push({label:'Cura',total:state.pvAtual-antes,detail:Math.round(h.regen.cura*100)+'% do PV máx ('+cura+') · −'+gasto+' de sangue'});
+  }
+  if(h.recarga&&og){
+    const antes=state.sangue; state.sangue=Math.min(og.sangueMax,state.sangue+Math.round(og.sangueMax*h.recarga));
+    lines.push({label:'Sangue',total:'+'+(state.sangue-antes),detail:'Reserva: '+state.sangue+' / '+og.sangueMax});
+  }
+  if(typeof I.aoUsar==='function'){
+    try{const extra=I.aoUsar({hab:h,state:state,calc:c,linhas:lines});if(Array.isArray(extra))extra.forEach(l=>lines.push(l))}catch(e){}
+  }
+  if(!lines.length) lines.push({label:'Efeito',total:'✓',detail:h.descricao||'Habilidade usada.'});
+  pushRoll({title:h.nome,sub:I.nome,cost:cost,sangue:custoSangue,lines:lines});
+  refresh();
+}
+const MUSA_VIDA=[0,0,0,0,0,2,3,4,6,8,10];
+function armaDano(s){
+  let f=s.dano;
+  if(s.musa) f+='+1'+(s.musa.dominio?'+5':'');
+  return f;
+}
+function attackWith(i,useAlt){
+  const s=state.inv[i]; if(!s||s.tipo!=='arma'||!s.ativo) return;
+  const c=compute(), cr=s.crit||{min:20,mult:2}, alt=useAlt&&s.alt?s.alt:null;
+  const a=acertoLine(c,s.bonus+(alt&&alt.bonus||0),'arma',cr.min);
+  const dl=damageLine('Dano',alt&&alt.formula?alt.formula:armaDano(s),c,true), lines=[a,dl];
+  if(!dl.err&&alt&&!alt.formula){dl.total+=alt.dano;dl.detail+=' + '+alt.dano+' ('+alt.label+')'}
+  if(a.flag==='crit'&&!dl.err){
+    if(cr.mult>1){dl.total*=cr.mult;dl.detail='('+dl.detail+') × '+cr.mult+' crítico'}
+    if(cr.efeito) lines.push({label:'Efeito do crítico',total:'!',detail:cr.efeito});
+  }
+  if(s.musa&&!dl.err){
+    const pc=MUSA_VIDA[s.musa.nivel];
+    if(pc>0) lines.push({label:'Roubo de vida',total:Math.floor(dl.total*pc/100),detail:pc+'% do dano causado, se acertar. Aplique em "Recuperar vida"; nunca passa da vida máxima.'});
+    if(s.musa.dominio) lines.push({label:'Marca da Morte',total:'+2',detail:'Se acertar, o alvo fica marcado: +2 nos testes de ataque contra ele.'});
+  }
+  pushRoll({title:s.nome||'Arma',sub:'Ataque com arma'+(alt?' · '+alt.label:''),lines:lines});
+}
+function makeItem(w){
+  const it={nome:w.nome,tipo:w.tipo||'arma',ativo:true,buffs:w.buffs||'',dano:w.dano||'1d8+FOR',bonus:w.bonusAcerto||0,invocada:true,nota:w.nota||''};
+  if(w.crit) it.crit=w.crit;
+  if(w.alt) it.alt=w.alt;
+  if(w.barreira) it.barreira={max:w.barreira,atual:w.barreira};
+  return it;
+}
+/* ---------- tema visual por inata ---------- */
+function chainSVG(x1,y1,x2,y2){
+  const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy), n=Math.round(len/21), ang=Math.atan2(dy,dx)*180/Math.PI;
+  let s='';
+  for(let i=0;i<=n;i++){
+    const t='translate('+(x1+dx*i/n).toFixed(1)+' '+(y1+dy*i/n).toFixed(1)+') rotate('+ang.toFixed(1)+')';
+    s+=i%2?'<rect x="-15" y="-4" width="30" height="8" rx="4" transform="'+t+'"/>'
+           :'<rect x="-17" y="-9" width="34" height="18" rx="9" transform="'+t+'"/>';
+  }
+  return s;
+}
+const SVG_OPEN='<svg viewBox="0 0 560 220" preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">';
+const ART={
+  velocidade:()=>SVG_OPEN+`
+    <g fill="currentColor"><path opacity=".6" d="M440 -10 L372 118 L420 118 L360 232 L505 88 L452 88 L525 -10Z"/>
+      <path opacity=".4" d="M310 14 L274 88 L303 88 L270 160 L346 72 L318 72 L358 14Z"/>
+      <path opacity=".5" d="M535 118 L508 170 L528 170 L504 218 L560 158 L540 158 L560 118Z"/></g>
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path opacity=".55" d="M170 52H300"/><path opacity=".4" d="M120 92H262"/><path opacity=".5" d="M200 132H330"/><path opacity=".35" d="M150 172H290"/>
+      <path opacity=".7" d="M246 28 L222 70 L248 70 L226 112"/><path opacity=".6" d="M386 150 L366 186 L388 186 L370 216"/></g></svg>`,
+  restricao:()=>SVG_OPEN+`
+    <g fill="none" stroke="currentColor" stroke-width="3.5">${chainSVG(300,-20,570,240)}${chainSVG(570,-20,300,240)}</g>
+    <circle cx="435" cy="110" r="13" fill="currentColor"/></svg>`,
+  tsukumo:()=>{
+    let sp='';
+    for(let i=0;i<18;i++){
+      const a=i*20*Math.PI/180, r1=104+(i%3)*12, r2=r1+22+(i%2)*14, rm=(r1+r2)/2;
+      const p=(r,ang)=>(430+Math.cos(ang)*r).toFixed(1)+' '+(110+Math.sin(ang)*r).toFixed(1);
+      sp+='<path d="M'+p(r1,a)+' L'+p(rm,a+.07)+' L'+p(r2,a)+'"/>';
+    }
+    return SVG_OPEN+`<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="430" cy="110" r="26" opacity=".7"/><circle cx="430" cy="110" r="52" opacity=".5" stroke-dasharray="6 8"/>
+      <circle cx="430" cy="110" r="84" opacity=".4"/>${sp}</g><circle cx="430" cy="110" r="10" fill="currentColor"/></svg>`;
+  },
+  gelo:()=>{
+    const flake=(cx,cy,r,op)=>{
+      let s='';
+      for(let i=0;i<6;i++){
+        const a=i*60*Math.PI/180, ca=Math.cos(a), sa=Math.sin(a);
+        const pt=(d,off)=>(cx+ca*d-sa*off).toFixed(1)+' '+(cy+sa*d+ca*off).toFixed(1);
+        s+='<path d="M'+pt(0,0)+' L'+pt(r,0)+' M'+pt(r*.55,0)+' L'+pt(r*.82,r*.22)+' M'+pt(r*.55,0)+' L'+pt(r*.82,-r*.22)+'"/>';
+      }
+      return '<g opacity="'+op+'">'+s+'</g>';
+    };
+    return SVG_OPEN+'<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">'+flake(430,105,95,.8)+flake(310,60,40,.5)+flake(525,175,45,.5)+flake(300,170,28,.4)+flake(540,40,26,.45)+'</g>'
+      +'<g fill="currentColor"><path opacity=".3" d="M330 222 L348 150 L366 222Z"/><path opacity=".25" d="M372 222 L398 120 L424 222Z"/><path opacity=".3" d="M460 222 L478 140 L496 222Z"/></g></svg>';
+  },
+  sombras:()=>{
+    const head=(x,y,sc,op)=>'<g opacity="'+op+'" transform="translate('+x+' '+y+') scale('+sc+')"><path d="M0 50 L26 30 L18 -2 L42 18 L70 12 L88 -10 L90 26 L116 42 L84 72 L30 74Z"/><circle cx="88" cy="38" r="3.5" fill="var(--bg)"/></g>';
+    return SVG_OPEN+'<g fill="none" stroke="currentColor" stroke-width="3"><ellipse cx="430" cy="190" rx="150" ry="30" opacity=".35"/><ellipse cx="430" cy="190" rx="100" ry="19" opacity=".5"/><ellipse cx="430" cy="190" rx="52" ry="10" opacity=".7"/></g>'
+      +'<g fill="currentColor">'+head(300,40,1.1,.55)+head(410,70,1.5,.8)+'<path opacity=".3" d="M520 205 L532 110 L545 205Z"/><path opacity=".25" d="M470 205 L484 130 L496 205Z"/><path opacity=".25" d="M350 205 L364 140 L376 205Z"/></g></svg>';
+  },
+  adaptacao:()=>{
+    const R=28, w=R*Math.sqrt(3), hex=(cx,cy,r)=>{const p=[];for(let i=0;i<6;i++){const a=(60*i-30)*Math.PI/180;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1))}return p.join(' ')};
+    let cells='';
+    for(let q=-2;q<=2;q++)for(let r=-2;r<=2;r++){
+      const sd=-q-r; if(Math.abs(sd)>2) continue;
+      const d=Math.max(Math.abs(q),Math.abs(r),Math.abs(sd)), x=430+w*(q+r/2), y=110+1.5*R*r;
+      cells+='<polygon points="'+hex(x,y,R-3)+'" fill="'+(d<2?'currentColor':'none')+'" fill-opacity="'+(d===0?.7:.28)+'" stroke="currentColor" stroke-width="3" stroke-opacity="'+(d===0?.95:(.6-d*.15).toFixed(2))+'"/>';
+    }
+    return SVG_OPEN+cells+'</svg>';
+  },
+  cupido:()=>{
+    const H='M0 14 C -26 -6 -22 -26 -10 -26 C -4 -26 0 -21 0 -17 C 0 -21 4 -26 10 -26 C 22 -26 26 -6 0 14 Z';
+    const D=[[430,115,8,2.8,.5],[320,60,-12,1.1,.4],[520,60,14,1,.45],[300,160,10,1.4,.35],[380,190,-8,.8,.45],[500,175,-6,1.2,.4],[550,120,10,.7,.5],[270,100,-4,.7,.35],[460,25,6,.8,.4]];
+    const hs=D.map(d=>'<path opacity="'+d[4]+'" transform="translate('+d[0]+' '+d[1]+') rotate('+d[2]+') scale('+d[3]+')" d="'+H+'"/>').join('');
+    const arrow=(x,y,a,L,op)=>'<g opacity="'+op+'" transform="translate('+x+' '+y+') rotate('+a+')"><path d="M'+(-L)+' 0 H'+L+'"/><path d="M'+L+' 0 l-13 -9 M'+L+' 0 l-13 9"/>'
+      +'<path d="M'+(-L)+' 0 l-11 -10 M'+(-L)+' 0 l-11 10 M'+(-L+13)+' 0 l-11 -10 M'+(-L+13)+' 0 l-11 10"/></g>';
+    return SVG_OPEN+'<g fill="currentColor">'+hs+'</g><g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">'
+      +arrow(430,115,-28,125,.85)+arrow(335,150,-52,70,.5)+arrow(515,160,-8,60,.45)+'</g></svg>';
+  },
+  sangue:()=>{
+    const P='M0 -22 C 12 -4 16 4 16 12 A16 16 0 0 1 -16 12 C -16 4 -12 -4 0 -22Z';
+    const D=[[430,120,0,2.2,.55],[330,60,10,1.2,.45],[510,70,-8,1,.5],[300,160,5,1.5,.4],[390,185,0,1,.5],[490,170,-6,1.3,.45],[545,125,8,.8,.5],[265,90,-4,.8,.4],[350,120,12,.7,.4],[455,30,0,.9,.45]];
+    const drops=D.map(d=>'<path opacity="'+d[4]+'" transform="translate('+d[0]+' '+d[1]+') rotate('+d[2]+') scale('+d[3]+')" d="'+P+'"/>').join('');
+    const drips=[[320,70],[395,40],[470,95],[535,55]].map(d=>'<path d="M'+d[0]+' -10 V'+d[1]+'" opacity=".5"/><circle cx="'+d[0]+'" cy="'+(d[1]+8)+'" r="6" fill="currentColor" stroke="none" opacity=".6"/>').join('');
+    return SVG_OPEN+'<g fill="currentColor">'+drops+'</g><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round">'+drips+'</g></svg>';
+  },
+  itadori:()=>{
+    const F=[[430,100,-10,2.0,.6],[330,50,15,1.2,.45],[510,60,-25,1.0,.5],[300,150,-5,1.5,.4],[380,175,20,1.0,.5],[480,160,10,1.4,.45],
+      [545,130,-15,.8,.5],[270,80,25,.8,.4],[350,110,-20,.7,.4],[455,30,5,.8,.45],[410,200,-8,.8,.4],[520,195,12,.9,.4]];
+    const fist='<rect x="6" y="16" width="28" height="20" rx="7"/><circle cx="10.5" cy="14" r="4.6"/><circle cx="18" cy="12" r="4.8"/><circle cx="26" cy="12" r="4.8"/><circle cx="32" cy="15" r="4.2"/><rect x="2" y="22" width="12" height="7" rx="3.5" transform="rotate(-20 8 25)"/>';
+    const fs=F.map(f=>'<g opacity="'+f[4]+'" transform="translate('+f[0]+' '+f[1]+') rotate('+f[2]+') scale('+f[3]+') translate(-20 -20)">'+fist+'</g>').join('');
+    return SVG_OPEN+'<g fill="currentColor">'+fs+'</g></svg>';
+  },
+  armas:()=>SVG_OPEN+`
+    <g fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+      <g transform="translate(400 110) rotate(38)" opacity=".7"><path d="M0 -105 L10 -75 V18 H-10 V-75Z"/><path d="M-28 18 H28 V30 H-28Z"/><path d="M-5 30 H5 V68 H-5Z"/><circle cx="0" cy="76" r="8"/></g>
+      <g transform="translate(470 110) rotate(-32)" opacity=".5"><path d="M0 -125 L13 -88 H-13Z"/><rect x="-2.5" y="-90" width="5" height="190"/></g>
+      <g transform="translate(335 112) rotate(14)" opacity=".4"><path d="M0 -86 L8 -60 V10 H-8 V-60Z"/><path d="M-20 10 H20 V19 H-20Z"/><path d="M-4 19 H4 V50 H-4Z"/></g>
+      <g transform="translate(520 120) rotate(18)" opacity=".45"><rect x="-2.5" y="-80" width="5" height="170"/><path d="M2 -78 Q58 -92 62 -44 Q56 -14 2 -26Z"/></g>
+    </g></svg>`
+};
+let themeId=null;
+function applyTheme(){
+  const id=state.inata||'';
+  if(id===themeId) return; themeId=id;
+  const root=document.documentElement, mark=document.querySelector('.top .mark'), card=$('inataArt');
+  if(id) root.setAttribute('data-inata',id); else root.removeAttribute('data-inata');
+  const svg=ART[id]?ART[id]():'';
+  if(svg){mark.innerHTML=svg;mark.classList.add('has-art');card.innerHTML=svg}
+  else{mark.textContent='呪';mark.classList.remove('has-art');card.innerHTML=''}
+}
+function bonusTexto(buffs){
+  const r=parseBuffs(buffs).buffs;
+  return Object.keys(r).map(k=>(STAT_NAME[k]||BUFF_LABEL[k])+' '+sgn(r[k])).join(', ');
+}
+function modosHTML(I,c){
+  if(!I.modos||(!I.modos.length&&!I.turnos)) return '';
+  const ativos=I.modos.filter(m=>modoAtivo(m.id)).length;
+  return `<div class="modos-h"><p class="cap">${esc(I.modosTitulo||'Modos ativos')}</p><button class="btn" data-act="turno"${(ativos||I.turnos)?'':' disabled'}>Passar turno</button></div>
+    <p class="muted modos-note">${I.modoUnico?'Só um modo fica ativo por vez'+(I.acumulativo?', e cada um inclui os bônus dos modos menores':'')+'. ':''}${I.modos.length?'Toque em "Passar turno" ao fim de cada turno: a ficha conta os turnos, cobra a manutenção no prazo de cada efeito e encerra o que tem duração.':'Toque em "Passar turno" ao fim de cada turno para liberar o que só vale uma vez por turno ou não pode se repetir em turnos seguidos.'}</p>
+    <div class="abils modos">${I.modos.filter(m=>!(m.automatico&&!modoAtivo(m.id))).map(m=>{
+      const on=modoAtivo(m.id), t=on?state.modos[m.id]:0, per=m.cada||3, mc=m.manutencao!==undefined?m.manutencao:m.custo;
+      const bf=parseBuffs(modoBuffs(I,m)).buffs;
+      const chips=Object.keys(bf).map(k=>'<span class="chip">'+esc(STAT_NAME[k]||BUFF_LABEL[k])+' '+sgn(bf[k])+'</span>').join('')+(m.requerTodos?'<span class="chip hot">Requer as 7 adaptações ativas</span>':'');
+      return `<div class="abil modo${on?' on':''}"><span class="abil-top"><b>${esc(m.nome)}</b><span class="cost">${m.custo} EA</span></span>
+        <span class="abil-math">${chips}</span>
+        ${m.descricao?'<span class="abil-desc">'+esc(m.descricao)+'</span>':''}
+        <span class="abil-desc">${m.duracao?'Ativação '+m.custo+' EA · Dura '+m.duracao+' turnos':'Ativação '+m.custo+' EA · Manutenção '+mc+' EA '+(per===1?'a cada turno':'a cada '+per+' turnos')}${I.acumulativo?' · inclui os bônus dos modos menores':''}</span>
+        ${on?'<span class="abil-desc"><b>Ativo há '+t+' turno'+(t===1?'':'s')+'.</b> '+(m.duracao?'Termina em '+(m.duracao-t)+' turno'+((m.duracao-t)===1?'':'s')+'.':'Próxima manutenção em '+(per-(t%per))+' turno'+((per-(t%per))===1?'':'s')+'.')+'</span>':''}
+        ${m.automatico?'':'<button class="btn'+(on?'':' primary')+'" data-act="modo" data-m="'+esc(m.id)+'">'+(on?'Desativar':'Ativar')+'</button>'}</div>`}).join('')}</div>`;
+}
+function recursoHTML(I){
+  if(!I.origens||!I.origens.length) return '';
+  const og=origemAtual(I), mx=og.sangueMax, pct=mx?state.sangue/mx*100:0;
+  return `<div class="modos-h"><p class="cap">Origem e reserva de sangue</p></div>
+    <div class="seg origem" role="group" aria-label="Origem do usuário">${I.origens.map(x=>
+      `<button data-act="origem" data-o="${esc(x.id)}" class="${x.id===og.id?'on':''}" aria-pressed="${x.id===og.id}">${esc(x.nome)}</button>`).join('')}</div>
+    <p class="modos-note">${esc(og.texto||'')}</p>
+    <div class="vital-h" style="margin-top:10px"><b>Sangue</b><span class="formula">${state.sangue} / ${mx} · −${og.custoAtaque} por ataque</span></div>
+    <div class="bar" aria-hidden="true" style="margin-top:6px"><i class="f-ea" style="width:${pct}%"></i></div>
+    <div class="quick"><input type="number" id="sgAmt" min="1" placeholder="valor" aria-label="Valor de sangue" inputmode="numeric">
+      <button class="btn" data-act="sgGasta">Gastar</button><button class="btn" data-act="sgRec">Recuperar</button></div>`;
+}
+function marcasHTML(I){
+  if(!I.marcas) return '';
+  const dom=I.marcas.dominio&&modoAtivo(I.marcas.dominio), n=state.marcas||0;
+  return `<div class="modos-h"><p class="cap">Marcas de Gelo</p></div>
+    <div class="marks">${[0,1,2].map(i=>'<span class="pip'+(i<n?' on':'')+'"></span>').join('')}<span class="muted">${n} / 3 no alvo atual</span></div>
+    <div class="quick"><button class="btn primary" data-act="marca">+${dom?2:1} marca${dom?'s':''} (acertou)</button>
+      <button class="btn" data-act="marcaMenos">−1</button><button class="btn" data-act="marcaZera">Zerar</button></div>
+    <p class="modos-note">${dom?'Domínio ativo: cada acerto aplica 2 marcas, e com 3 marcas o alvo fica congelado e perde o próximo turno.':'Com 3 marcas, o alvo recebe −2 em Destreza por 2 turnos e as marcas desaparecem.'} Zere ao trocar de alvo.</p>`;
+}
+function espelhoHTML(I){
+  if(!I.habilidades.some(h=>h.reflete)) return '';
+  return `<div class="modos-h"><p class="cap">Espelho Glacial</p></div>
+    <label class="fld" for="espelhoDano" style="max-width:320px">Dano do ataque recebido<input type="number" id="espelhoDano" min="1" value="${esc(state.espelhoDano)}" placeholder="Dano original" inputmode="numeric"></label>
+    <p class="modos-note">Preencha antes de usar o Espelho Glacial, como contra-ataque.</p>`;
+}
+function elementoHTML(I){
+  if(!I.temElemento) return '';
+  const red=modoAtivo('vontade')?15:(modoAtivo('elemental')?10:0);
+  return `<div class="modos-h"><p class="cap">Adaptação elemental</p></div>
+    <label class="fld" for="elemento" style="max-width:420px">Elemento ou tipo de dano escolhido<input type="text" id="elemento" value="${esc(state.elemento)}" placeholder="Ex.: fogo, corte, perfuração" autocomplete="off"></label>
+    <p class="modos-note">${red?'Redução ativa: −'+red+' de dano recebido do tipo escolhido.':'Ative a Adaptação Elemental para reduzir o dano do tipo escolhido.'}</p>`;
+}
+function estadosHTML(I){
+  if(!I.estados||!I.estados.length) return '';
+  const ativos=I.estados.filter(e=>state.usos[e.id]);
+  const chips=ativos.length?ativos.map(e=>'<span class="chip good">'+esc(e.nome)+(e.buffs?': '+esc(bonusTexto(e.buffs)):'')+'</span>').join(' ')
+    :'<span class="muted">Nenhum efeito ativo.</span>';
+  return `<div class="modos-h"><p class="cap">Estado de combate</p><button class="btn" data-act="novoCombate">Encerrar combate</button></div>
+    <p class="modos-note">${chips}</p>`;
+}
+function despertaresHTML(I,c){
+  if(!I.despertares||!I.despertares.length) return '';
+  const cards=I.despertares.map((d,i)=>{
+    const on=!!state.desp[d.id], prev=I.despertares[i-1], nxt=I.despertares[i+1];
+    const locked=!on&&prev&&!state.desp[prev.id], travado=on&&nxt&&state.desp[nxt.id];
+    const bf=parseBuffs(d.buffs).buffs;
+    const chips=Object.keys(bf).map(k=>'<span class="chip">'+esc(STAT_NAME[k]||BUFF_LABEL[k])+' '+sgn(bf[k])+'</span>').join('')
+      +(d.eaFixa!==undefined?'<span class="chip hot">Energia amaldiçoada '+d.eaFixa+'</span>':'');
+    const ef=(d.efeitos||[]).map(e=>'<span class="abil-desc"><b>'+esc(e.nome)+'.</b> '+esc(e.texto)+'</span>').join('');
+    let btn;
+    if(!on) btn='<button class="btn primary" data-act="desp" data-d="'+esc(d.id)+'"'+(locked?' disabled':'')+'>Despertar</button>'+(locked?'<span class="abil-desc">Requer o despertar anterior.</span>':'');
+    else if(travado) btn='<span class="abil-desc">Para reverter, desfaça antes o despertar seguinte.</span>';
+    else btn='<button class="btn" data-act="despRev" data-d="'+esc(d.id)+'">Reverter (mestre)</button>';
+    const extra=on&&d.reflexo?'<button class="btn primary" data-act="reflexo"'+(state.usos.reflexo?' disabled':'')+'>Reflexo Instintivo'+(state.usos.reflexo?' (usado)':'')+'</button>':'';
+    return `<div class="abil modo${on?' on':''}"><span class="abil-top"><b>${esc(d.nome)}</b>${on?'<span class="chip good">Despertado</span>':''}</span>
+      ${d.citacao?'<span class="abil-desc"><em>“'+esc(d.citacao)+'”</em></span>':''}
+      <span class="abil-math">${chips}</span>${ef}<div class="quick">${btn}${extra}</div></div>`;
+  }).join('');
+  return `<div class="modos-h"><p class="cap">Despertares (permanentes)</p><button class="btn" data-act="novoCombate">Novo combate</button></div>
+    <div class="abils modos">${cards}</div>`;
+}
+function invocarCard(h,I,cost){
+  const free=state.inv.filter(x=>!x).length;
+  return `<div class="abil abil-wide"><span class="abil-top"><b>${esc(h.nome)}</b><span class="cost">${cost} EA por arma</span></span>
+    <span class="abil-desc">${esc(h.descricao)}</span><span class="cap">Slots livres no inventário: ${free}/${SLOTS}</span>
+    <div class="weap-grid">${I.armas.map((w,k)=>`<button class="weap${cost>state.eaAtual?' lack':''}" data-act="invocar" data-w="${k}"><b>${esc(w.nome)}</b><span>${esc(w.resumo)}</span></button>`).join('')}</div></div>`;
+}
+
+function applyMaxes(c){
+  if(c.pvMax>state.pvMaxSeen&&state.pvAtual>=state.pvMaxSeen) state.pvAtual=c.pvMax;
+  state.pvMaxSeen=c.pvMax; state.pvAtual=clamp(state.pvAtual,0,c.pvMax);
+  if(c.eaMax>state.eaMaxSeen&&state.eaAtual>=state.eaMaxSeen) state.eaAtual=c.eaMax;
+  state.eaMaxSeen=c.eaMax; state.eaAtual=clamp(state.eaAtual,0,c.eaMax);
+}
+
+/* ---------- avisos ---------- */
+let noticeT;
+function notice(msg){const n=$('notice');n.textContent=msg;n.hidden=false;clearTimeout(noticeT);noticeT=setTimeout(()=>{n.hidden=true},4200)}
+
+/* ---------- render ---------- */
+let forceSync=false;
+function setVal(el,v){if(forceSync||document.activeElement!==el) el.value=v}
+
+function buildStatic(){
+  $('stats').innerHTML=STATS.map(s=>`
+    <div class="stat">
+      <div class="stat-h"><span class="stat-n">${s.n}</span><span class="stat-k">${s.k}</span><span class="chip" id="sp-${s.k}" hidden>principal</span></div>
+      <div class="stat-v" id="sv-${s.k}">0</div>
+      <div class="stat-sub" id="ss-${s.k}"></div>
+      <div class="stat-ctl">
+        <button class="icon" data-act="stat-" data-k="${s.k}" aria-label="Diminuir ${s.n}">−</button>
+        <button class="icon" data-act="stat+" data-k="${s.k}" aria-label="Aumentar ${s.n}">+</button>      </div>
+    </div>`).join('');
+  $('grau').innerHTML=GRAUS.map((g,i)=>`<option value="${i}">${g}</option>`).join('');
+  $('inataSel').innerHTML='<option value="">— Escolher inata —</option>'+
+    Object.keys(INATAS).map(id=>`<option value="${id}">${esc(INATAS[id].nome)}${INATAS[id].exemplo?' (modelo)':''}</option>`).join('');
+}
+
+function checarEnergia(){
+  const I=INATAS[state.inata]; if(!I||!I.zeraSemEnergia||state.eaAtual>0) return;
+  const forma=I.modos.find(m=>m.testeDC&&modoAtivo(m.id)), ads=I.modos.filter(m=>m.adaptacao&&modoAtivo(m.id));
+  if(forma){
+    delete state.modos[forma.id]; if(I.exaustao) state.modos[I.exaustao]=0;
+    notice('A energia acabou: a forma terminou e você ficou exausto (−3 em Força, Destreza e Constituição por 2 turnos).');
+  }else if(ads.length) notice('A energia acabou: todas as adaptações foram desativadas.');
+  ads.forEach(m=>{delete state.modos[m.id]});
+}
+function refresh(){
+  checarEnergia();
+  const c=compute(); applyMaxes(c);
+  const I=INATAS[state.inata];
+  if(I&&I.origens){
+    const og=origemAtual(I), mx=og.sangueMax;
+    if(mx>state.sangueMaxSeen&&state.sangue>=state.sangueMaxSeen) state.sangue=mx;
+    state.sangueMaxSeen=mx; state.sangue=clamp(state.sangue,0,mx);
+  }
+  applyTheme();
+  // cabeçalho e identidade
+  $('hdrName').textContent=state.nome.trim()||'Personagem sem nome';
+  $('hdrSub').textContent=GRAUS[state.grau]+' · Nível '+state.nivel+(state.jogador.trim()?' · jogador: '+state.jogador.trim():'')+' · '+(I?I.nome:'sem inata');
+  setVal($('nome'),state.nome); setVal($('jogador'),state.jogador); setVal($('historia'),state.historia);
+  $('nivel').textContent=state.nivel;
+  $('exBanner').hidden=!state.exemplo;
+  // pontos
+  const total=pontosTotal(), spent=STATS.reduce((a,s)=>a+state.status[s.k],0), left=total-spent;
+  const chip=$('ptsChip'); chip.textContent=spent+' / '+total; chip.className='chip'+(left<0?' hot':left===0?' good':'');
+  const brk=' Total: 10 iniciais + '+(state.nivel-1)+' de nível + '+state.grau+' de grau + '+state.extras+' extras. Limite por status: '+STAT_MAX+' pontos ('+(STAT_MAX+STAT_BONUS)+' nos atributos principais da inata).';
+  $('ptsHint').textContent=(left>0?'Restam '+left+' pontos para distribuir.'
+    :left===0?'Todos os pontos distribuídos.'
+    :'Você usou '+(-left)+' pontos além do limite. Remova pontos de algum status ou dê pontos extras.')+brk;
+  $('grau').value=String(state.grau); setVal($('extras'),state.extras);
+  // status
+  STATS.forEach(s=>{
+    const base=state.status[s.k], bf=c.b[s.k]||0;
+    $('sv-'+s.k).textContent=c.eff[s.k];
+    const cap=statCap(s.k);
+    $('sp-'+s.k).hidden=!(I&&I.principais&&I.principais.indexOf(s.k)>=0);
+    let sub='base '+base+'/'+cap+(base>cap?' (acima do limite)':'')+(bf?' · buffs '+sgn(bf):'');
+    if(s.k==='DES') sub+='\nacerto soma no máximo +'+DES_CAP;
+    if(s.k==='CON') sub+='\nPV máx = CON × '+c.pvMult;
+    $('ss-'+s.k).innerHTML=esc(sub).replace(/\n/g,'<br>');
+  });
+  document.querySelectorAll('[data-act="stat+"]').forEach(b=>{b.disabled=left<=0||state.status[b.dataset.k]>=statCap(b.dataset.k)});
+  document.querySelectorAll('[data-act="stat-"]').forEach(b=>{b.disabled=state.status[b.dataset.k]<=0});
+  // vida
+  const pvPct=c.pvMax?state.pvAtual/c.pvMax*100:0;
+  const tmpPct=c.pvMax?Math.min(state.pvTemp/c.pvMax*100,100-pvPct):0;
+  $('pvBar').style.width=pvPct+'%'; $('pvTmpBar').style.width=tmpPct+'%';
+  $('pvBig').textContent=state.pvAtual+(state.pvTemp?' +'+state.pvTemp:''); $('pvBigMax').textContent=c.pvMax;
+  $('pvMax').textContent=c.pvMax;
+  $('pvFormula').textContent='CON '+c.eff.CON+' × '+c.pvMult+(c.b.PV?' '+sgn(c.b.PV):'');
+  setVal($('pvAtual'),state.pvAtual); setVal($('pvTemp'),state.pvTemp);
+  // energia
+  $('eaBar').style.width=(c.eaMax?state.eaAtual/c.eaMax*100:0)+'%';
+  $('eaBig').textContent=state.eaAtual; $('eaBigMax').textContent=c.eaMax; $('eaMax').textContent=c.eaMax;
+  $('eaFormula').textContent=c.eaFix===0?'Zero Energia: sempre 0':c.eaFix!==null?'Restrição Celestial: sempre '+c.eaFix:'50 + 50 × '+(state.nivel-1)+(c.b.EA?' '+sgn(c.b.EA):'');
+  setVal($('eaAtual'),state.eaAtual);
+  // combate
+  $('acertoFormula').textContent='1d20 '+sgn(c.acerto);
+  $('acertoBreak').textContent='DES '+c.desCap+(c.eff.DES>DES_CAP?' (limite +'+DES_CAP+')':'')+(c.b.ACERTO?' · buffs '+sgn(c.b.ACERTO):'')+(c.danoBonus?' · bônus de dano '+sgn(c.danoBonus):'')+(c.b.RES?' · resistência física '+sgn(c.b.RES):'');
+  freeHint(c);
+  // inata
+  $('inataSel').value=state.inata;
+  renderInata(c);
+  renderReversa(c);
+  renderInvDerived(c);
+  $('invCount').textContent=state.inv.filter(Boolean).length+'/'+SLOTS;
+  save();
+}
+
+const REVERSA=[
+  {n:1,nome:'Cura Rápida',custo:20,cura:'2d10+VON',nivel:'Iniciante',txt:'Cura apenas a si mesmo.'},
+  {n:2,nome:'Cura Concentrada',custo:35,cura:'4d10+VON',nivel:'Intermediário',txt:'Pode curar aliados.'},
+  {n:3,nome:'Cura Avançada',custo:50,cura:'6d10+VON',nivel:'Avançado',txt:'Pode estabilizar um aliado que chegou a 0 PV, se ele ainda estiver vivo.'}
+];
+function renderReversa(c){
+  const card=$('revCard'); if(!card) return;
+  const off=state.inata==='restricao'; card.hidden=off; if(off) return;
+  const lv=state.reversa, usada=!!state.usos.turno_reversa;
+  $('revChip').textContent=lv?'Nível '+lv+' · '+REVERSA[lv-1].nivel:'Não aprendida';
+  $('revChip').className='chip'+(lv?' good':'');
+  const seg=[0,1,2,3].map(n=>'<button data-act="revNivel" data-n="'+n+'" class="'+(lv===n?'on':'')+'" aria-pressed="'+(lv===n)+'">'+(n?'Nível '+n:'Não aprendeu')+'</button>').join('');
+  let h='<p class="muted modos-note">A Técnica Reversa não é automática: o mestre decide quem consegue aprender e em que nível o personagem está.</p><div class="seg" role="group" aria-label="Nível de domínio da reversão" style="max-width:520px">'+seg+'</div>';
+  if(!lv){
+    h+='<p class="muted" style="margin-top:10px">Marque o nível quando o mestre liberar a técnica.</p>';
+  }else{
+    h+='<p class="muted modos-note">Uma cura por turno. Sem energia suficiente, não há cura. Use "Passar turno" para liberar a próxima cura.</p><div class="quick" style="margin-bottom:10px"><button class="btn" data-act="turno">Passar turno</button></div><div class="abils">';
+    REVERSA.filter(t=>t.n<=lv).forEach(t=>{
+      const p=preview(t.cura,c,0), sem=state.eaAtual<t.custo;
+      h+='<div class="abil"><span class="abil-top"><b>'+esc(t.nome)+'</b><span class="cost">'+t.custo+' EA</span></span>'
+        +'<span class="abil-desc">'+esc(t.txt)+'</span>'
+        +'<span class="abil-math"><span class="chip good">Cura '+esc(p.error?t.cura:p.text)+'</span></span>'
+        +'<div class="quick"><button class="btn primary" data-act="rev" data-n="'+t.n+'" data-t="eu"'+(usada||sem?' disabled':'')+'>Curar a mim</button>'
+        +(t.n>=2?'<button class="btn" data-act="rev" data-n="'+t.n+'" data-t="aliado"'+(usada||sem?' disabled':'')+'>Curar aliado</button>':'')
+        +(t.n>=2?'<button class="btn hot" data-act="rev" data-n="'+t.n+'" data-t="int"'+(usada||state.eaAtual<Math.ceil(t.custo/2)?' disabled':'')+'>Interrompida</button>':'')+'</div></div>';
+    });
+    h+='</div>'+(usada?'<p class="muted modos-note"><b>Já usada neste turno.</b></p>':'');
+  }
+  h+='<details style="margin-top:12px"><summary>Regras da Técnica Reversa</summary><ul class="muted" style="margin:8px 0 0;padding-left:18px">'
+    +'<li>A cura nunca passa do PV máximo.</li><li>Sem ressurreição: não revive personagens mortos.</li>'
+    +'<li>Ferimentos graves, membros perdidos e danos permanentes não são curados por uma cura comum.</li>'
+    +'<li>Interrupção em cura concentrada ou avançada: perde a ação, mas gasta só metade da energia.</li>'
+    +'<li>Cura em aliados exige contato físico ou a proximidade definida pelo mestre.</li>'
+    +'<li>Nível 1 cura só a si mesmo (2d10+VON). Nível 2 cura aliados (4d10+VON). Nível 3 usa a Cura Avançada (6d10+VON) e estabiliza aliado a 0 PV.</li></ul></details>';
+  $('revBody').innerHTML=h;
+}
+function freeHint(c){
+  const h=$('freeHint'), p=preview($('freeF').value,c||compute(),0);
+  h.className=p.error?'err':''; h.textContent=p.error?p.error:'= '+p.text+' (atributos já somados)';
+}
+
+function renderInata(c){
+  const I=INATAS[state.inata], box=$('inataBody');
+  if(!I){box.innerHTML='<div class="empty">Escolha uma inata para ver as habilidades. Ao tocar em uma habilidade, a energia é gasta e o acerto e o dano são rolados.</div>';return}
+  box.innerHTML=`
+    <div class="inata-head"><h3>${esc(I.nome)}</h3>${I.exemplo?'<span class="chip">modelo</span>':''}</div>
+    <p class="cap">Descrição dos poderes</p><p class="desc">${esc(I.descricao)}</p>
+    ${recursoHTML(I)}${elementoHTML(I)}${modosHTML(I,c)}${despertaresHTML(I,c)}${estadosHTML(I)}${marcasHTML(I)}${espelhoHTML(I)}<div class="abils">${I.habilidades.map((h,i)=>{
+      const cost=h.custo||0, lack=cost>state.eaAtual;
+      if(h.invocar) return invocarCard(h,I,cost);
+      const hit=h.acerto===true||(h.acerto===undefined&&!!h.dano);
+      const math=[];
+      if(hit) math.push('<span class="chip">Acerto 1d20 '+sgn(c.acerto+(h.bonusAcerto||0))+'</span>');
+      if(h.dano){const p=preview(danoFormula(I,h),c,c.danoBonus);math.push(p.error?'<span class="chip bad">dano: '+esc(p.error)+'</span>':'<span class="chip">'+(h.golpes>1?h.golpes+'× ':'')+'Dano '+esc(p.text)+'</span>')}
+      if(h.cura){const p=preview(h.cura,c,0);math.push(p.error?'<span class="chip bad">cura: '+esc(p.error)+'</span>':'<span class="chip good">Cura '+esc(p.text)+'</span>')}
+      if(h.requer==='pv25') math.push('<span class="chip hot">Só com 25% de vida ou menos</span>');
+      if(h.usoUnico) math.push('<span class="chip">Uma vez por combate</span>');
+      if(h.usoTurno) math.push('<span class="chip">Uma vez por turno</span>');
+      if(h.resiste) math.push('<span class="chip">Alvo resiste: '+esc(h.resisteChip||'Vontade')+'</span>');
+      if(h.reflete) math.push('<span class="chip hot">Só como contra-ataque</span><span class="chip">Recarga: 2 turnos</span>');
+      if(h.sangue&&I.origens) math.push('<span class="chip hot">−'+origemAtual(I).custoAtaque+' sangue</span>');
+      if(h.recarga) math.push('<span class="chip good">Sangue +'+Math.round(h.recarga*100)+'% da reserva</span>');
+      if(h.regen) math.push('<span class="chip good">Cura '+Math.round(h.regen.cura*100)+'% do PV máx</span><span class="chip hot">−'+Math.round(h.regen.sangue*100)+'% do sangue</span>');
+      return `<button class="abil${lack?' lack':''}${h.dominio?' dom':''}" data-act="hab" data-i="${i}">
+        <span class="abil-top"><b>${esc(h.nome)}</b><span class="cost">${cost} EA</span></span>
+        ${h.descricao?'<span class="abil-desc">'+esc(h.descricao)+'</span>':''}
+        <span class="abil-math">${math.join('')}</span></button>`}).join('')}</div>`;
+}
+
+/* inventário */
+function slotEmpty(i){
+  return `<article class="slot empty-slot" data-i="${i}"><span class="slot-n" style="margin:0">Slot ${i+1}</span>
+    <button class="btn" data-act="add" data-i="${i}">Adicionar item</button></article>`;
+}
+function slotFilled(s,i){
+  const arma=s.tipo==='arma', p='inv-'+i+'-';
+  return `<article class="slot${arma?' is-arma':''}" data-i="${i}">
+    <div class="slot-h"><span class="slot-n">Slot ${i+1}</span>
+      <label class="chk" for="${p}ativo"><input type="checkbox" id="${p}ativo" data-f="ativo"${s.ativo?' checked':''}><span>${arma?'Equipada':'Em uso'}</span></label>
+      <button class="icon" data-act="rm" data-i="${i}" aria-label="Remover item do slot ${i+1}">×</button></div>
+    <label class="fld" for="${p}nome">Nome<input type="text" id="${p}nome" data-f="nome" value="${esc(s.nome)}" placeholder="${arma?'Nome da arma':'Nome do item'}" autocomplete="off"></label>
+    <div class="seg" role="group" aria-label="Tipo do item">
+      <button data-act="tipo" data-i="${i}" data-v="item" class="${arma?'':'on'}" aria-pressed="${!arma}">Item</button>
+      <button data-act="tipo" data-i="${i}" data-v="arma" class="${arma?'on':''}" aria-pressed="${arma}">Arma</button></div>
+    ${arma?`<div class="two">
+      <label class="fld" for="${p}dano">Dano<input type="text" id="${p}dano" data-f="dano" value="${esc(s.dano)}" placeholder="1d8+FOR" autocomplete="off" spellcheck="false"></label>
+      <label class="fld" for="${p}bonus">Bônus de acerto<input type="number" id="${p}bonus" data-f="bonus" value="${s.bonus}" inputmode="numeric"></label></div>`:''}
+    <label class="fld" for="${p}buffs">Buffs<input type="text" id="${p}buffs" data-f="buffs" value="${esc(s.buffs)}" placeholder="FOR+2, ACERTO+1, DANO+2" autocomplete="off" spellcheck="false"></label>
+    <div class="slot-d"></div></article>`;
+}
+function musaHTML(s,idx){
+  const m=s.musa, pc=MUSA_VIDA[m.nivel], falta=m.nivel>=10?0:5-(m.mortes%5);
+  const ok=state.grau===5&&m.nivel>=10&&m.pacto;
+  let h='<div class="musa"><p class="cap">Musaboru · nível '+m.nivel+' / 10</p><p class="calc">Dano adicional +1 · Roubo de vida '+pc+'% · '+(m.nivel>=10?'nível máximo':m.mortes+' mortes, faltam '+falta+' para o próximo nível')+'</p>'
+    +'<div class="quick"><button class="btn" data-act="musaMorte" data-i="'+idx+'">+1 morte com a espada</button><button class="btn" data-act="musaMorteMenos" data-i="'+idx+'">−1</button></div>'
+    +'<p class="cap">Expansão: Ceifador das Almas</p>'
+    +'<p class="calc">Requisitos: Grau Especial '+(state.grau===5?'✓':'✗')+' · nível 10 '+(m.nivel>=10?'✓':'✗')+' · pacto '+(m.pacto?'✓':'✗')+'</p>'
+    +'<div class="quick"><button class="btn'+(m.pacto?' primary':'')+'" data-act="musaPacto" data-i="'+idx+'" aria-pressed="'+m.pacto+'">Pacto da Alma: '+(m.pacto?'firmado':'não firmado')+'</button>'
+    +'<button class="btn'+(m.dominio?' primary':'')+'" data-act="musaDom" data-i="'+idx+'"'+(ok||m.dominio?'':' disabled')+'>'+(m.dominio?'Encerrar domínio':'Abrir domínio')+'</button></div>';
+  if(m.dominio) h+='<p class="calc">Domínio ativo: +5 de dano em todos os ataques da Musaboru (já somado) e Marca da Morte (+2 de acerto no alvo marcado).</p>'
+    +'<div class="quick"><button class="btn hot" data-act="musaColheita" data-i="'+idx+'"'+(m.colheita?' disabled':'')+'>'+(m.colheita?'Colheita Final já usada':'Colheita Final (5d10+1)')+'</button></div>';
+  return h+'</div>';
+}
+const ARMAS=[
+  {nome:'Katana Comum',dano:'1d8+FOR',alcance:'Corpo a corpo',efeito:'Nenhum.',desc:'Espada equilibrada, boa para ataques rápidos.'},
+  {nome:'Adaga',dano:'1d6+FOR',alcance:'Corpo a corpo',efeito:'+2 em testes para ataques rápidos.',desc:'Leve e fácil de esconder, mas causa menos dano.',alt:{label:'ataque rápido',dano:0,bonus:2}},
+  {nome:'Bastão',dano:'1d6+FOR',alcance:'Corpo a corpo',efeito:'Nenhum.',desc:'Arma simples, barata e fácil de encontrar.'},
+  {nome:'Lança',dano:'1d8+FOR',alcance:'Corpo a corpo, com alcance maior que uma espada',efeito:'Pode atacar inimigos um pouco mais distantes.',desc:'Boa para manter distância do adversário.'},
+  {nome:'Martelo de Combate',dano:'1d10+FOR',alcance:'Corpo a corpo',efeito:'−2 em testes de acerto devido ao peso.',desc:'Lento, mas capaz de causar bastante dano.',bonus:-2},
+  {nome:'Corrente de Ferro',dano:'1d6+FOR',alcance:'Médio',efeito:'Pode tentar prender o alvo com um teste de Força.',desc:'Útil para atrapalhar os movimentos do inimigo.'},
+  {nome:'Arco e Flechas',dano:'1d8+DES',alcance:'Longo',efeito:'Ataca à distância, mas precisa de munição.',desc:'Permite atacar sem se aproximar do adversário. O dano soma Destreza; troque no inventário se o mestre preferir outro atributo.'},
+  {nome:'Faca de Combate',dano:'1d6+FOR',alcance:'Corpo a corpo',efeito:'Pode ser arremessada, causando 1d4 de dano.',desc:'Pequena, leve e versátil.',alt:{label:'arremessar',dano:0,formula:'1d4'}},
+  {nome:'Musaboru',especial:true,dano:'1d8+FOR',alcance:'Corpo a corpo',efeito:'Evolui com mortes; roubo de vida a partir do nível 5; domínio Ceifador das Almas.',desc:'A Katana Ceifadora de Almas. Arma especial e evolutiva.',
+    musa:{nivel:1,mortes:0,pacto:false,dominio:false,colheita:false},
+    lore:'Uma antiga katana encontrada em um campo de batalha onde milhares morreram. Dizem que a espada absorvia fragmentos das almas daqueles que matava. Quanto mais vidas ela ceifa, mais poderosa se torna. Com o passar dos anos, acumulou uma presença amaldiçoada que parece possuir uma vontade própria.',
+    regras:['Nível inicial 1, máximo 10. Dano adicional de +1 em todos os níveis.','A cada 5 mortes causadas pelo usuário com a própria Musaboru, a espada sobe 1 nível.','Roubo de vida (% do dano causado): nível 5: 2% · 6: 3% · 7: 4% · 8: 6% · 9: 8% · 10: 10%. Nunca ultrapassa a vida máxima.','Expansão Ceifador das Almas: exige Grau Especial, Musaboru no nível 10 e o Pacto da Alma ("Se minha vida chegar ao fim, minha alma pertencerá à Musaboru."). Se o usuário morrer, a alma fica presa na espada, mesmo que outra pessoa a empunhe.','Campo dos Ceifados: o ambiente vira um campo de batalha sombrio e as almas fortalecem a ligação com o portador.','Ceifa Espiritual: ataques dentro do domínio recebem +5 de dano. O roubo de vida continua.','Marca da Morte: quem for atingido fica marcado, e o usuário recebe +2 nos testes de ataque contra esse alvo.','Colheita Final: uma vez por expansão, golpe de 5d10 + o bônus da Musaboru (+1). O domínio continua ativo, mas a habilidade não pode ser usada de novo na mesma expansão. O domínio não mata automaticamente: dano e efeitos seguem as regras de combate.']}
+];
+function renderArmas(){
+  $('armasPanel').innerHTML='<p class="hint" style="margin-top:0">Escolha uma arma e ela vai para um slot livre do inventário. Armas comuns não têm energia amaldiçoada nem habilidades especiais. O dano soma o atributo usado no ataque. Efeitos como prender ou empurrar dependem dos testes definidos pelo mestre.</p><div class="armas-grid">'
+   +ARMAS.map((w,i)=>'<article class="slot'+(w.especial?' is-arma':'')+'"><div class="slot-h"><span class="slot-n">'+(w.especial?'Arma especial':'Arma básica')+'</span></div>'
+    +'<h3 class="arma-n">'+esc(w.nome)+'</h3><div class="chips"><span class="chip">Dano '+esc(w.dano)+'</span><span class="chip">'+esc(w.alcance)+'</span></div>'
+    +'<p class="calc"><b>Efeito:</b> '+esc(w.efeito)+'</p><p class="calc">'+esc(w.desc)+'</p>'
+    +(w.lore?'<details class="lore"><summary>História e regras</summary><p class="calc">'+esc(w.lore)+'</p><ul>'+w.regras.map(r=>'<li class="calc">'+esc(r)+'</li>').join('')+'</ul></details>':'')
+    +'<button class="btn primary" data-act="armaAdd" data-w="'+i+'">Adicionar ao inventário</button></article>').join('')+'</div>';
+}
+function renderInventory(){
+  $('inv').innerHTML=state.inv.map((s,i)=>s?slotFilled(s,i):slotEmpty(i)).join('');
+  if(!$('armasPanel').dataset.ok){renderArmas();$('armasPanel').dataset.ok='1'}
+}
+function renderInvDerived(c){
+  c=c||compute();
+  document.querySelectorAll('#inv .slot[data-i]').forEach(el=>{
+    const s=state.inv[+el.dataset.i], d=el.querySelector('.slot-d'); if(!s||!d) return;
+    const r=parseBuffs(s.buffs);
+    let h='<div class="chips">';
+    const keys=Object.keys(r.buffs);
+    keys.forEach(k=>{h+='<span class="chip'+(s.ativo?'':' off')+'">'+esc(BUFF_LABEL[k]||STAT_NAME[k])+' '+sgn(r.buffs[k])+'</span>'});
+    r.bad.forEach(b=>{h+='<span class="chip bad" title="Não entendi este buff">? '+esc(b.toLowerCase())+'</span>'});
+    if(!keys.length&&!r.bad.length) h+='<span class="calc">Sem buffs.</span>';
+    h+='</div>';
+    const idx=el.dataset.i;
+    if(s.invocada) h='<div class="chips"><span class="chip good">Invocada</span></div>'+h;
+    if(s.nota) h+='<p class="calc">'+esc(s.nota)+'</p>';
+    if(s.barreira){
+      const b=s.barreira;
+      h+='<div class="bar" aria-hidden="true"><i class="f-ea" style="width:'+(b.atual/b.max*100)+'%"></i></div>'
+        +'<p class="calc">Barreira '+b.atual+' / '+b.max+'</p>'
+        +'<div class="quick"><input type="number" id="inv-'+idx+'-bamt" min="1" placeholder="dano" aria-label="Dano na barreira" inputmode="numeric">'
+        +'<button class="btn hot" data-act="barDano" data-i="'+idx+'">Dano na barreira</button></div>';
+    }
+    if(s.tipo==='arma'){
+      const p=preview(armaDano(s),c,c.danoBonus), cr=s.crit||{min:20,mult:2};
+      h+=p.error?'<p class="calc err">Dano: '+esc(p.error)+'</p>'
+        :'<p class="calc">Acerto 1d20 '+sgn(c.acerto+s.bonus)+' · Dano '+esc(p.text)
+          +(cr?' · Crítico '+(cr.min<20?cr.min+'–20':'20')+(cr.mult>1?' ×'+cr.mult:''):'')+'</p>';
+      const dis=(!s.ativo||p.error)?' disabled':'';
+      h+='<div class="quick"><button class="btn primary" data-act="atk" data-i="'+idx+'"'+dis+'>Atacar</button>'
+        +(s.alt?'<button class="btn" data-act="atk" data-alt="1" data-i="'+idx+'"'+dis+'>Atacar: '+esc(s.alt.label)+(s.alt.formula?' ('+esc(s.alt.formula)+')':' +'+s.alt.dano)+'</button>':'')+'</div>';
+      if(!s.ativo) h+='<p class="calc">Equipe a arma para atacar.</p>';
+    }
+    if(s.musa) h+=musaHTML(s,idx);
+    if(s.invocada) h+='<button class="btn" data-act="rm" data-i="'+idx+'">Desconjurar</button>';
+    d.innerHTML=h;
+  });
+}
+
+/* dock */
+function groupHTML(g){
+  return `<div class="dg-t"><b>${esc(g.title)}</b>${g.sub?'<span>'+esc(g.sub)+'</span>':''}${g.cost?'<span class="cost">−'+g.cost+' EA</span>':''}${g.sangue?'<span class="cost">−'+g.sangue+' sangue</span>':''}</div>
+    <div class="dg-l">${g.lines.map(l=>l.err
+      ?`<div class="ln"><span class="lbl">${esc(l.label)}</span><span class="det err">${esc(l.err)}</span></div>`
+      :`<div class="ln ${l.flag||''}"><span class="lbl">${esc(l.label)}</span><b class="tot">${esc(l.total)}</b>${l.flag?'<span class="flag">'+(l.flag==='crit'?'Crítico':'Falha crítica')+'</span>':''}<span class="det">${esc(l.detail)}</span></div>`).join('')}</div>`;
+}
+let dockT;
+function setMini(on){
+  const d=$('dock'), b=$('btnMin');
+  d.classList.toggle('mini',on); b.textContent=on?'▴':'▾';
+  b.setAttribute('aria-expanded',String(!on)); b.setAttribute('aria-label',on?'Expandir resultado':'Recolher resultado');
+}
+function armMini(){clearTimeout(dockT);dockT=setTimeout(()=>setMini(true),9000)}
+function renderDock(animate){
+  const m=$('dockMain'), g=state.log[0];
+  m.innerHTML=g?groupHTML(g):'<p class="dock-empty">Nenhuma rolagem ainda. Toque em qualquer botão de dado para rolar.</p>';
+  if(animate){m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');setMini(false);armMini()}
+  $('histList').innerHTML=state.log.length?state.log.map(g=>
+    `<div class="hist-row"><time>${esc(g.time||'')}</time><span><b>${esc(g.title)}</b> ${g.cost?'(−'+g.cost+' EA) ':''}${esc(summary(g))}</span></div>`).join('')
+    :'<p class="muted">Sem rolagens.</p>';
+}
+
+/* ---------- eventos ---------- */
+let armed=null, armedT;
+function act(a,b){
+  const c=compute();
+  switch(a){
+    case 'nivel+': state.nivel=clamp(state.nivel+1,1,MAX_NIVEL);refresh();break;
+    case 'nivel-': state.nivel=clamp(state.nivel-1,1,MAX_NIVEL);refresh();break;
+    case 'extra+': state.extras++;refresh();break;
+    case 'extra-': state.extras=Math.max(0,state.extras-1);refresh();break;
+    case 'stat+':{
+      const left=pontosTotal()-STATS.reduce((x,s)=>x+state.status[s.k],0);
+      if(left<=0){notice('Sem pontos restantes. Suba de nível ou de grau, ou adicione pontos extras.');break}
+      const k=b.dataset.k, cap=statCap(k);
+      if(state.status[k]>=cap){notice(STAT_NAME[k]+' já está no máximo ('+cap+').'+(cap===STAT_MAX?' Algumas inatas liberam +'+STAT_BONUS+' nos atributos principais.':''));break}
+      state.status[k]++;refresh();break}
+    case 'stat-': if(state.status[b.dataset.k]>0){state.status[b.dataset.k]--;refresh()}break;
+    case 'teste':{const k=b.dataset.k;
+      pushRoll({title:'Teste de '+STAT_NAME[k],lines:[d20Line(k,[{v:c.eff[k],t:k,always:true}])]});break}
+    case 'acerto': pushRoll({title:'Acerto',lines:[acertoLine(c,0)]});break;
+    case 'free':{
+      const f=$('freeF').value,p=parseFormula(f);
+      if(p.error){notice(p.error);break}
+      const r=rollTerms(p.terms,ctxOf(c),0);
+      pushRoll({title:'Rolagem livre',sub:f.trim(),lines:[{label:'Total',total:r.total,detail:r.detail}]});break}
+    case 'hab': useAbility(int(b.dataset.i));break;
+    case 'atk': attackWith(int(b.dataset.i),b.dataset.alt==='1');break;
+    case 'invocar':{
+      const I=INATAS[state.inata], w=I&&I.armas&&I.armas[int(b.dataset.w)]; if(!w) break;
+      const ab=I.habilidades.find(x=>x.invocar), cost=ab?(ab.custo||0):0, slot=state.inv.indexOf(null);
+      if(slot<0){notice('Inventário cheio. Desconjure uma arma ou remova um item antes de invocar.');break}
+      if(cost>state.eaAtual){notice('Energia insuficiente: invocar custa '+cost+' e você tem '+state.eaAtual+'.');break}
+      state.eaAtual-=cost; state.inv[slot]=makeItem(w); renderInventory();
+      pushRoll({title:'Invocar '+w.nome,sub:I.nome,cost:cost,lines:[{label:'Inventário',total:'Slot '+(slot+1),detail:w.nome+' adicionada ao inventário e equipada.'}]});
+      refresh();break}
+    case 'modo':{
+      const I=INATAS[state.inata], m=I&&I.modos&&I.modos.find(x=>x.id===b.dataset.m); if(!m||m.automatico) break;
+      if(modoAtivo(m.id)){delete state.modos[m.id];refresh();notice(m.nome+' desativado.');break}
+      if(I.exaustao&&modoAtivo(I.exaustao)){
+        const ex=I.modos.find(x=>x.id===I.exaustao), r=ex.duracao-state.modos[I.exaustao];
+        notice('Exausto: incapaz de ativar esta inata por mais '+r+' turno'+(r===1?'':'s')+'.');break}
+      if(I.exclusivo&&modoAtivo(I.exclusivo)){notice('Enquanto a forma extrema estiver ativa, não é possível ativar outras habilidades.');break}
+      const ads=I.modos.filter(x=>x.adaptacao);
+      if(m.requerTodos&&!ads.every(x=>modoAtivo(x.id))){notice('Só é desbloqueada com as '+ads.length+' adaptações ativas ao mesmo tempo.');break}
+      if(m.custo>state.eaAtual){notice('Energia insuficiente: ativar custa '+m.custo+' e você tem '+state.eaAtual+'.');break}
+      let trocou='';
+      if(I.modoUnico) I.modos.forEach(x=>{if(x.id!==m.id&&modoAtivo(x.id)){trocou=x.nome;delete state.modos[x.id]}});
+      state.eaAtual-=m.custo; state.modos[m.id]=0;
+      if(m.requerTodos) ads.forEach(x=>{delete state.modos[x.id]});
+      const lines=[{label:'Modo ativado',total:'✓',detail:bonusTexto(modoBuffs(I,m))+(trocou?' · '+trocou+' desativado':'')+(m.requerTodos?' · as adaptações se uniram em uma só forma':'')}];
+      if(m.aoAtivar&&m.aoAtivar.cura){
+        const l=damageLine('Cura',m.aoAtivar.cura,c,false);
+        if(!l.err){const antes=state.pvAtual;state.pvAtual=Math.min(c.pvMax,state.pvAtual+l.total);l.detail+=' → +'+(state.pvAtual-antes)+' PV'}
+        lines.push(l);
+      }
+      pushRoll({title:m.nome,sub:I.nome,cost:m.custo,lines:lines});
+      refresh();break}
+    case 'origem': state.origem=b.dataset.o;refresh();break;
+    case 'sgGasta':case 'sgRec':{
+      const og=origemAtual(INATAS[state.inata]), n=int($('sgAmt')&&$('sgAmt').value); if(!og) break;
+      if(n<=0){notice('Digite o valor de sangue.');break}
+      state.sangue=a==='sgGasta'?Math.max(0,state.sangue-n):Math.min(og.sangueMax,state.sangue+n);
+      refresh();break}
+    case 'invTab':{
+      const ar=b.dataset.v==='armas';
+      $('inv').hidden=ar;$('armasPanel').hidden=!ar;
+      $('tabInv').classList.toggle('on',!ar);$('tabArmas').classList.toggle('on',ar);
+      $('tabInv').setAttribute('aria-pressed',String(!ar));$('tabArmas').setAttribute('aria-pressed',String(ar));
+      break}
+    case 'armaAdd':{
+      const w=ARMAS[int(b.dataset.w)], slot=state.inv.indexOf(null); if(!w) break;
+      if(slot<0){notice('Inventário cheio. Remova um item para adicionar '+w.nome+'.');break}
+      const it={nome:w.nome,tipo:'arma',ativo:true,buffs:'',dano:w.dano,bonus:w.bonus||0,invocada:false,nota:w.efeito};
+      if(w.alt) it.alt=Object.assign({},w.alt);
+      if(w.musa) it.musa=Object.assign({},w.musa);
+      state.inv[slot]=it;renderInventory();refresh();
+      notice(w.nome+' adicionada ao slot '+(slot+1)+' do inventário.');break}
+    case 'musaMorte':case 'musaMorteMenos':{
+      const m=(state.inv[int(b.dataset.i)]||{}).musa; if(!m) break;
+      if(a==='musaMorte'){m.mortes++;const n=Math.min(10,1+Math.floor(m.mortes/5));if(n>m.nivel){m.nivel=n;notice('Musaboru subiu para o nível '+n+'.')}}
+      else{m.mortes=Math.max(0,m.mortes-1);m.nivel=Math.min(m.nivel,Math.min(10,1+Math.floor(m.mortes/5)))||1}
+      if(m.nivel<10){m.dominio=false}
+      refresh();break}
+    case 'musaPacto':{const m=(state.inv[int(b.dataset.i)]||{}).musa;if(m){m.pacto=!m.pacto;if(!m.pacto)m.dominio=false;refresh()}break}
+    case 'musaDom':{const m=(state.inv[int(b.dataset.i)]||{}).musa;if(m){m.dominio=!m.dominio;if(m.dominio)m.colheita=false;refresh()}break}
+    case 'musaColheita':{
+      const sl=state.inv[int(b.dataset.i)], m=sl&&sl.musa; if(!m||!m.dominio||m.colheita) break;
+      m.colheita=true;
+      pushRoll({title:'Colheita Final',sub:'Musaboru · Ceifador das Almas',lines:[damageLine('Dano','5d10+1',c,false)]});
+      refresh();break}
+    case 'revNivel': state.reversa=int(b.dataset.n);refresh();break;
+    case 'rev':{
+      const t=REVERSA[int(b.dataset.n)-1], modo=b.dataset.t;
+      if(!t||t.n>state.reversa) break;
+      if(state.usos.turno_reversa){notice('A Técnica Reversa só pode ser usada uma vez por turno. Clique em "Passar turno".');break}
+      const custo=modo==='int'?Math.ceil(t.custo/2):t.custo;
+      if(custo>state.eaAtual){notice('Sem energia suficiente: custa '+custo+' e você tem '+state.eaAtual+'.');break}
+      state.eaAtual-=custo; state.usos.turno_reversa=true;
+      const lines=[];
+      if(modo==='int') lines.push({label:'Interrompida',total:'−'+custo,detail:'A ação foi perdida e só metade da energia foi gasta ('+custo+').'});
+      else{
+        const l=damageLine('Cura',t.cura,c,false);
+        if(modo==='eu'&&!l.err){const antes=state.pvAtual;state.pvAtual=Math.min(c.pvMax,state.pvAtual+l.total);l.detail+=' → +'+(state.pvAtual-antes)+' PV (máx '+c.pvMax+')'}
+        else if(!l.err) l.detail+=' no aliado, sem passar do PV máximo dele'+(t.n===3?'. Se ele estava a 0 PV e vivo, fica estabilizado.':'.');
+        lines.push(l);
+      }
+      pushRoll({title:t.nome,sub:'Técnica Reversa'+(modo==='aliado'?' · aliado':''),cost:custo,lines:lines});
+      refresh();break}
+    case 'marca':{
+      const I=INATAS[state.inata]; if(!I||!I.marcas) break;
+      const dom=I.marcas.dominio&&modoAtivo(I.marcas.dominio);
+      state.marcas=(state.marcas||0)+(dom?2:1);
+      if(state.marcas>=3){
+        state.marcas=0;
+        pushRoll({title:'Marcas de Gelo',sub:I.nome,lines:[dom
+          ?{label:'Congelado',total:'✓',detail:'3 marcas: o alvo fica congelado e perde o próximo turno. As marcas desapareceram.'}
+          :{label:'Frio Cortante',total:'−2 DES',detail:'3 marcas: o alvo recebe −2 em Destreza por 2 turnos. As marcas desapareceram.'}]});
+      }
+      refresh();break}
+    case 'marcaMenos': state.marcas=Math.max(0,(state.marcas||0)-1);refresh();break;
+    case 'marcaZera': state.marcas=0;refresh();break;
+    case 'turno':{
+      const I=Object.assign({modos:[]},INATAS[state.inata]||{}); if(!I.modos) I.modos=[];
+      const prox={};
+      Object.keys(state.usos).forEach(k=>{if(k.indexOf('turno_')===0) prox['ant_'+k.slice(6)]=true});
+      Object.keys(state.usos).forEach(k=>{if(k.indexOf('turno_')===0||k.indexOf('ant_')===0) delete state.usos[k]});
+      Object.assign(state.usos,prox);
+      const lines=[]; let gasto=0, acabou=false;
+      I.modos.forEach(m=>{
+        if(!modoAtivo(m.id)) return;
+        state.modos[m.id]++;
+        if(m.duracao){if(state.modos[m.id]>=m.duracao){delete state.modos[m.id];lines.push({label:m.nome,total:'fim',detail:'Duração de '+m.duracao+' turnos encerrada.'})}return}
+        const per=m.cada||3, mc=m.manutencao!==undefined?m.manutencao:m.custo;
+        if(acabou||state.modos[m.id]%per!==0) return;
+        if(mc<=state.eaAtual){state.eaAtual-=mc;gasto+=mc;lines.push({label:m.nome,total:'−'+mc,detail:'Manutenção paga.'})}
+        else if(I.zeraSemEnergia){state.eaAtual=0;acabou=true;lines.push({label:m.nome,total:'✗',detail:'A energia acabou antes de pagar a manutenção.'})}
+        else{delete state.modos[m.id];lines.push({label:m.nome,total:'✗',detail:'Energia insuficiente para a manutenção: modo desativado.'})}
+      });
+      if(I.testeVontade&&!acabou&&state.eaAtual>0){
+        const forma=I.modos.find(m=>m.testeDC&&modoAtivo(m.id));
+        const ads=I.modos.filter(m=>m.adaptacao&&modoAtivo(m.id));
+        let dc=null;
+        if(forma) dc=forma.testeDC; else if(ads.length){const t=I.testeVontade.find(x=>ads.length<=x.ate);dc=t?t.dc:null}
+        if(dc!==null){
+          const l=d20Line('Teste de Vontade',[{v:c.eff.VON,t:'VON',always:true}]);
+          const ok=l.total>=dc; l.detail+=' vs dificuldade '+dc+': '+(ok?'sucesso':'falha'); l.flag='';
+          lines.push(l);
+          if(!ok){
+            if(forma){delete state.modos[forma.id];lines.push({label:'Controle perdido',total:'✗',detail:'A forma terminou.'})}
+            else{ads.forEach(m=>{delete state.modos[m.id]});lines.push({label:'Controle perdido',total:'✗',detail:'Todas as adaptações foram desativadas. Você pode ativar de novo no próximo turno, pagando os custos.'})}
+          }
+        }
+      }
+      if(lines.length) pushRoll({title:'Fim do turno',sub:I.nome,cost:gasto,lines:lines});
+      else notice('Turno passou. Nada a pagar agora.');
+      refresh();break}
+    case 'desp':{
+      const I=INATAS[state.inata], d=I&&I.despertares&&I.despertares.find(x=>x.id===b.dataset.d); if(!d) break;
+      const i=I.despertares.indexOf(d);
+      if(i>0&&!state.desp[I.despertares[i-1].id]){notice('É preciso despertar o anterior primeiro.');break}
+      state.desp[d.id]=true;
+      pushRoll({title:d.nome,sub:I.nome,lines:[{label:'Despertou',total:'✓',detail:bonusTexto(d.buffs)+(d.eaFixa!==undefined?' · energia amaldiçoada reduzida a '+d.eaFixa:'')}]});
+      refresh();break}
+    case 'despRev':{
+      if(armed!==b){
+        if(armed)armed.textContent=armed.dataset.label;
+        b.dataset.label=b.textContent;b.textContent='Clique de novo para reverter';armed=b;
+        clearTimeout(armedT);armedT=setTimeout(()=>{if(armed){armed.textContent=armed.dataset.label;armed=null}},4000);break}
+      clearTimeout(armedT);armed=null;
+      delete state.desp[b.dataset.d];notice('Despertar revertido.');refresh();break}
+    case 'reflexo':{
+      if(state.usos.reflexo){notice('Reflexo Instintivo já usado neste combate.');break}
+      state.usos.reflexo=true;
+      pushRoll({title:'Reflexo Instintivo',sub:'Uma vez por combate',lines:[d20Line('Esquiva',[{v:c.eff.DES,t:'DES',always:true}])]});
+      refresh();break}
+    case 'novoCombate': state.usos={};notice('Usos por combate restaurados.');refresh();break;
+    case 'barDano':{
+      const i=int(b.dataset.i), s=state.inv[i], f=$('inv-'+i+'-bamt'), n=int(f&&f.value);
+      if(!s||!s.barreira) break;
+      if(n<=0){notice('Digite o dano que a barreira recebeu.');break}
+      s.barreira.atual=Math.max(0,s.barreira.atual-n);
+      if(s.barreira.atual===0){state.inv[i]=null;renderInventory();notice((s.nome||'Barreira')+' destruída e removida do inventário.')}
+      refresh();break}
+    case 'pvDano':{
+      const n0=int($('pvAmt').value);if(n0<=0){notice('Digite o valor do dano.');break}
+      const red=Math.min(n0,Math.max(0,c.b.RES||0)), n=n0-red;
+      if(red) notice('Resistência física reduziu '+red+' de dano. Você sofreu '+n+'.');
+      let rest=n;const t=Math.min(state.pvTemp,rest);state.pvTemp-=t;rest-=t;
+      state.pvAtual=Math.max(0,state.pvAtual-rest);$('pvAmt').value='';forceSync=true;refresh();forceSync=false;break}
+    case 'pvCura':{
+      const n=int($('pvAmt').value);if(n<=0){notice('Digite o valor da cura.');break}
+      state.pvAtual=Math.min(c.pvMax,state.pvAtual+n);$('pvAmt').value='';forceSync=true;refresh();forceSync=false;break}
+    case 'eaGasta':{
+      const n=int($('eaAmt').value);if(n<=0){notice('Digite quanto gastar.');break}
+      if(n>state.eaAtual){notice('Energia insuficiente: você tem '+state.eaAtual+'.');break}
+      state.eaAtual-=n;$('eaAmt').value='';forceSync=true;refresh();forceSync=false;break}
+    case 'eaRec':{
+      const n=int($('eaAmt').value);if(n<=0){notice('Digite quanto recuperar.');break}
+      state.eaAtual=Math.min(c.eaMax,state.eaAtual+n);$('eaAmt').value='';forceSync=true;refresh();forceSync=false;break}
+    case 'add':{
+      const i=int(b.dataset.i);state.inv[i]={nome:'',tipo:'item',ativo:true,buffs:'',dano:'1d6+FOR',bonus:0};
+      renderInventory();refresh();const f=$('inv-'+i+'-nome');if(f)f.focus();break}
+    case 'rm':{
+      const s=state.inv[int(b.dataset.i)];
+      state.inv[int(b.dataset.i)]=null;renderInventory();refresh();
+      if(s&&s.invocada) notice((s.nome||'Arma')+' desconjurada. O slot ficou livre.');
+      break}
+    case 'tipo':{const s=state.inv[int(b.dataset.i)];if(s){s.tipo=b.dataset.v;renderInventory();refresh()}break}
+    case 'dockMin':{
+      if($('dock').classList.contains('mini')){setMini(false);armMini()}else{clearTimeout(dockT);setMini(true)}
+      break}
+    case 'hist':{const box=$('histBox');box.hidden=!box.hidden;b.setAttribute('aria-expanded',String(!box.hidden));break}
+    case 'histClear': state.log=[];save();renderDock(false);break;
+    case 'data':{
+      const p=$('dataPanel');p.hidden=!p.hidden;b.setAttribute('aria-expanded',String(!p.hidden));
+      if(!p.hidden){$('dataText').value=JSON.stringify(Object.assign({},state,{log:[]}),null,1);p.scrollIntoView({block:'nearest'})}break}
+    case 'copy':{
+      const t=$('dataText');t.value=JSON.stringify(Object.assign({},state,{log:[]}),null,1);
+      const fallback=()=>{t.focus();t.select();notice('Texto selecionado. Use Ctrl+C ou o menu de copiar.')};
+      try{navigator.clipboard.writeText(t.value).then(()=>notice('Ficha copiada.'),fallback)}catch(e){fallback()}break}
+    case 'load':{
+      try{const o=JSON.parse($('dataText').value);state=sanitize(o);renderInventory();forceSync=true;refresh();forceSync=false;renderDock(false);notice('Ficha carregada.')}
+      catch(e){notice('Não consegui ler esse texto. Cole os dados copiados de outra ficha.')}break}
+    case 'keepEx': state.exemplo=false;refresh();break;
+    case 'nova':{
+      if(armed!==b){
+        if(armed)armed.textContent=armed.dataset.label;
+        b.dataset.label=b.textContent;b.textContent='Clique de novo para apagar tudo';armed=b;
+        clearTimeout(armedT);armedT=setTimeout(()=>{if(armed){armed.textContent=armed.dataset.label;armed=null}},4000);break}
+      clearTimeout(armedT);b.textContent=b.dataset.label;armed=null;
+      state=blank();renderInventory();forceSync=true;refresh();forceSync=false;renderDock(false);
+      $('dataPanel').hidden=true;$('btnData').setAttribute('aria-expanded','false');
+      notice('Ficha em branco. Distribua seus 10 pontos de status.');break}
+  }
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b&&!b.disabled)act(b.dataset.act,b)});
+
+const bind=(id,fn)=>{
+  const el=$(id);
+  el.addEventListener('input',()=>{fn(el);refresh()});
+  el.addEventListener('change',()=>{forceSync=true;refresh();forceSync=false});
+};
+bind('nome',el=>{state.nome=el.value});
+bind('jogador',el=>{state.jogador=el.value});
+bind('historia',el=>{state.historia=el.value});
+bind('extras',el=>{state.extras=Math.max(0,int(el.value))});
+$('grau').addEventListener('change',e=>{state.grau=clamp(int(e.target.value),0,GRAUS.length-1);refresh()});
+bind('pvAtual',el=>{state.pvAtual=Math.max(0,int(el.value))});
+bind('pvTemp',el=>{state.pvTemp=Math.max(0,int(el.value))});
+bind('eaAtual',el=>{state.eaAtual=Math.max(0,int(el.value))});
+$('inataSel').addEventListener('change',e=>{state.inata=e.target.value;refresh()});
+$('freeF').addEventListener('input',()=>freeHint());
+$('freeF').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();act('free')}});
+
+$('inv').addEventListener('input',e=>{
+  const t=e.target,f=t.dataset.f,slot=t.closest('.slot[data-i]');if(!f||!slot) return;
+  const s=state.inv[int(slot.dataset.i)];if(!s) return;
+  if(f==='ativo') s[f]=t.checked; else if(f==='bonus') s[f]=int(t.value); else s[f]=t.value;
+  refresh();
+});
+
+/* ---------- início ---------- */
+state=load();
+buildStatic();
+renderInventory();
+refresh();
+renderDock(false);
+setMini(true);
+document.addEventListener('input',e=>{if(!e.target) return;if(e.target.id==='elemento'){state.elemento=e.target.value;save()}else if(e.target.id==='espelhoDano'){state.espelhoDano=e.target.value;save()}});
+$('dock').addEventListener('pointerenter',()=>clearTimeout(dockT));
+$('dock').addEventListener('pointerleave',()=>{if(!$('dock').classList.contains('mini')) armMini()});
+})();
+</script>
+
+</body></html>
